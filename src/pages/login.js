@@ -2,9 +2,12 @@ import Password from "../../public/images/icon-password.svg";
 import Email from "../../public/images/icon-email.svg";
 import Image from "next/image";
 import Link from "next/link";
+import SharedHeader from "./shared-header";
 
 export default function Login() {
     return(
+        <>
+        <SharedHeader></SharedHeader>
         <div className="w-full mt-10 md:bg-white md:py-10 md:px-10 md:rounded md:max-w-[75%] lg:max-w-[50%] xl:max-w-[40%]">
             <h1 className="text-2xl font-bold">Login</h1>
             <p className="text-customGrey my-2">Add your details below to get back into the app</p>
@@ -38,5 +41,6 @@ export default function Login() {
                 
             </div>
         </div>
+        </>
     );
 }

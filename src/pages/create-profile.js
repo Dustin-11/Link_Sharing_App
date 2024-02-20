@@ -5,6 +5,7 @@ import Image from "next/image";
 import db from "@/firebase";
 import { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
+import SharedHeader from "./shared-header";
 
 
 
@@ -33,6 +34,8 @@ export default function CreateProfile () {
         }
     }
     return(
+        <>
+        <SharedHeader></SharedHeader>
         <div className="w-full mt-10 md:bg-white md:py-10 md:px-10 md:rounded md:max-w-[75%] lg:max-w-[50%] xl:max-w-[40%]">
             <h1 className="text-2xl font-bold">Create account</h1>
             <p className="text-customGrey my-2">Let's get you started sharing your links!</p>
@@ -100,5 +103,6 @@ export default function CreateProfile () {
                 <p><a className="text-customPurple cursor-pointer active:text-customPurpleActive">Login</a></p>
             </div>
         </div>
+        </>
     );
 }
