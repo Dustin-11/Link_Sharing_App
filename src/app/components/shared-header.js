@@ -1,4 +1,4 @@
-import Icon from "../../public/images/logo-devlinks-small.svg";
+import Icon from "../../../public/images/logo-devlinks-small.svg";
 import Image from "next/image";
 
 export default function SharedHeader() {

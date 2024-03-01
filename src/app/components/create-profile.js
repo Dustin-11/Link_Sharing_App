@@ -1,11 +1,12 @@
 "use client";
-import Password from "../../public/images/icon-password.svg";
-import Email from "../../public/images/icon-email.svg";
+import Password from "../../../public/images/icon-password.svg";
+import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
-import db from "@/firebase";
+import { db } from "@/lib/firebase";
 import { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
-import SharedHeader from "./shared-header";
+import auth from "@/lib/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 
 
@@ -15,27 +16,52 @@ export default function CreateProfile () {
     const [confirmPassword, setConfirmPassword] = useState("");
     const Collection = collection(db, 'users');
 
-    const createNewAccount = (e) => {
-        if(password === confirmPassword) {
-            e.preventDefault();
-            console.log(db);
-            const newDoc = addDoc(Collection, {
-                email: email,
-                password: password,
-            })
-            .then(() => {
-                console.log("Account created successfully");
-            })
-            .catch((error) => {
-                console.error("Error when creating account:", error);
-            })
-        } else {
-            console.error("Passwords do not match");
+   
+    const createNewAccount = async (e) => {
+        e.preventDefault();
+        try{
+        if(password !== confirmPassword) {
+            console.log("Check Password");
+            throw new Error("Passwords do not match");
+        }
+        if(password.length < 8) {
+            console.log("Invalid Password");
+            throw new Error ("Invalid Password");
+        }
+        // const queryEmailMatch = query(Collection, where("email", "==", email));
+        // getDocs(queryEmailMatch)
+        // .then((querySnapshot) => {
+        //     if(!querySnapshot.empty) {
+        //         console.log("Email already exists");
+        //         throw new Error("Email already exists");
+        //     }
+            // addDoc(Collection, {
+            //     email: email,
+            //     password: password,
+            // })
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            console.log('User signed up: ', userCredential.user);
+        }
+        // )
+            
+            // .then(() => {
+            //     console.log("Account created successfully");
+            //     setEmail("");
+            //     setPassword("");
+            //     setConfirmPassword("");
+            // })
+            // .catch((error) => {
+            //     console.error("Error when creating account:", error);
+            // })
+        // }
+        catch (error) {
+            console.error("Error in createNewAccount", error);
         }
     }
+
+
     return(
         <>
-        <SharedHeader></SharedHeader>
         <div className="w-full mt-10 md:bg-white md:py-10 md:px-10 md:rounded md:max-w-[75%] lg:max-w-[50%] xl:max-w-[40%]">
             <h1 className="text-2xl font-bold">Create account</h1>
             <p className="text-customGrey my-2">Let's get you started sharing your links!</p>
@@ -50,8 +76,7 @@ export default function CreateProfile () {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. alex@email.com"
-                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
-                    required ></input>
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"></input>
                     <div className="absolute left-3.5 top-[37px]">
                         <Image
                         src={Email}
@@ -98,10 +123,6 @@ export default function CreateProfile () {
                 type="submit"
                 >Create new account</button>
             </form>
-            <div className="flex flex-col items-center mt-5">
-                <p className="text-customGrey">Already have an account?</p>
-                <p><a className="text-customPurple cursor-pointer active:text-customPurpleActive">Login</a></p>
-            </div>
         </div>
         </>
     );
