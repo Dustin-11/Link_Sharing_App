@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import PhoneIcon from "../../../public/images/illustration-empty.svg"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //  components
 import PlatformOptions from "./platform-options";
@@ -10,16 +10,45 @@ import LinkCard from "./link-card";
 import Link from "next/link";
 
 export default function AddLink() {
-    const [listOfLinks, setListOfLinks] = useState([]);
+    // List of link-card objects -- allows for deleting and resorting
+    const [listOfLinks, setListOfLinks] = useState();
+    // Handles if the instruction or link-card is displayed
     const [displayLinks, setDisplayLinks] = useState(false);
     const [linkCount, setLinkCount] = useState(0);
-    const platforms = ['Github', 'Frontend Mentor', 'Twitter', 'LinkedIn', 'Youtube', 'Facebook', 'Twitch', 'Dev', 'CodeWars', 
-    'CodePen', 'freeCC', 'GitLab', 'Hash', 'Stack']
 
     const addNewLink = () => {
         setDisplayLinks(true);
         setLinkCount(linkCount + 1);
     };
+    const handleFunction = (card) => {
+        if(Array.isArray(listOfLinks)) {
+            let updated = false;
+            const newArray = listOfLinks.map(link => {
+                if(link.indexNumber === card.indexNumber) {
+                    updated = true;
+                    return { ...link, name: card.name, link: card.link }
+                    
+                }
+                else {
+                    return link
+                }
+            })
+            if (updated) {
+                setListOfLinks(newArray);
+            }
+            else {
+                setListOfLinks([...listOfLinks, card]);
+            }
+        
+        }
+        else {
+            setListOfLinks([card]);
+        }
+    };
+
+    useEffect(() => {
+        console.log(listOfLinks);
+    }, [listOfLinks]);
     return (
         <>
             <div className="px-5 pt-5">
@@ -31,7 +60,7 @@ export default function AddLink() {
             
                 {displayLinks ?
                 <div className="overflow-y-scroll h-[55%]">
-                    {Array.from({ length: linkCount }, (_, index) => (<LinkCard count={index} key={index}/>))}
+                    {Array.from({ length: linkCount }, (_, index) => (<LinkCard count={index} key={index} updateList={(item) => handleFunction(item)}/>))}
                 </div> :
             <div className="overflow-hidden h-[55%]">
                 <div className="bg-customLightGrey my-4 mx-5 rounded-lg text-center rounded-lg">

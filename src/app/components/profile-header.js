@@ -26,18 +26,22 @@ export default function ProfileHeader() {
         <nav className="bg-customWhite flex justify-between align-center w-full px-6 py-4 fixed top-0">
             <Image
             src={Icon}
+            alt="Devlinks Icon"
             className=""
             onClick={signingOut}>
             </Image>
             <div className="flex gap-2">
                 <button className="flex align-center px-6 py-2 rounded-lg
                 focus:bg-customLightPurple"><Image
-                src={Link}></Image> </button>
+                src={Link}
+                alt="Link Icon"></Image> </button>
                 <button className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple"><Image
-                src={Profile}></Image></button>
+                src={Profile}
+                alt="Profil Icon"></Image></button>
             </div>
             <button className="flex align-center px-3 py-2 rounded-lg focus:bg-customLightPurple border-2 border-customPurple"><Image
-            src={Preview}></Image></button>
+            src={Preview}
+            alt="Profile Preview Icon"></Image></button>
         </nav>
       
     );
