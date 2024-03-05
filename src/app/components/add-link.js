@@ -10,6 +10,7 @@ import LinkCard from "./link-card";
 import Link from "next/link";
 
 export default function AddLink() {
+
     // List of link-card objects -- allows for deleting and resorting
     const [listOfLinks, setListOfLinks] = useState();
     // Handles if the instruction or link-card is displayed
@@ -27,7 +28,6 @@ export default function AddLink() {
                 if(link.indexNumber === card.indexNumber) {
                     updated = true;
                     return { ...link, name: card.name, link: card.link }
-                    
                 }
                 else {
                     return link
@@ -39,7 +39,6 @@ export default function AddLink() {
             else {
                 setListOfLinks([...listOfLinks, card]);
             }
-        
         }
         else {
             setListOfLinks([card]);
@@ -83,7 +82,8 @@ export default function AddLink() {
             <div className="absolute bottom-0 w-full pb-5 bg-customWhite">
             <div className="border-b border-customBorders"></div>
             <div className="px-5">
-                <button className="mt-5 bg-customPurple text-customWhite w-full font-bold py-2 rounded-lg">Save</button>
+                <button className="mt-5 bg-customPurple text-customWhite w-full font-bold py-2 rounded-lg disabled:bg-customLightPurple"
+                        disabled={!displayLinks}>Save</button>
             </div>
             </div>
         </>
