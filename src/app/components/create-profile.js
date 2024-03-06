@@ -69,7 +69,7 @@ export default function CreateProfile () {
                 <div className="flex flex-col relative mt-2">
                     <label className="text-xs my-1">Email Address</label>
                     <input 
-                    className="border-2 border-customBorders focus:outline-none focus:border-customPurple 
+                    className="border-1 border-customBorders focus:outline-none focus:border-customPurple 
                     active:border-customPurple text-customGrey pl-10 py-2 rounded-lg
                     invalid:border-customRed" 
                     type="email" 
@@ -87,7 +87,7 @@ export default function CreateProfile () {
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Create Password</label>
                     <input 
-                    className="border-2 border-customBorders focus:outline-none focus:border-customPurple 
+                    className="border-1 border-customBorders focus:outline-none focus:border-customPurple 
                     active:border-customPurple text-customGrey pl-10 py-2 rounded-lg
                     invalid:border-customRed" 
                     type="text" 
@@ -103,10 +103,10 @@ export default function CreateProfile () {
                 </div>
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Confirm Password</label>
-                    <input className="border-2 border-customBorders focus:outline-none focus:border-customPurple 
+                    <input className="border-1 border-customBorders focus:outline-none focus:border-customPurple 
                     active:border-customPurple text-customGrey pl-10 py-2 rounded-lg" 
                     type="text" 
-                    placeholder="At leasrt 8 characters"
+                    placeholder="At least 8 characters"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     ></input>
@@ -117,7 +117,7 @@ export default function CreateProfile () {
                     </div>
                 </div>
                 <p className="text-xs text-customGrey my-6">Password must contain at least 8 characters</p>
-                <button className="w-full border-2 border-red block mx-auto py-2 bg-customPurple active:bg-customPurpleActive
+                <button className="w-full border-1 border-red block mx-auto py-2 bg-customPurple active:bg-customPurpleActive
                 active:shadow-lg active:shadow-customLightPurple
                 text-white rounded-lg" 
                 type="submit"

@@ -47,7 +47,7 @@ export default function PlatformOptions({ handleOptionSelection }) {
     ]
     return(
         <>
-        <div className="bg-customWhite absolute w-full py-2 rounded-lg border-customBorders border-2"
+        <div className="bg-customWhite absolute w-full py-2 rounded-lg border-customBorders border-1"
                 >
             <div className='text-left pl-2'
                  onClick={optionsClick}>

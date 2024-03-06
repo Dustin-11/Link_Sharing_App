@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function SharedHeader() {
     return(
-        <div className="w-full flex border-red border-1 justify-start md:justify-center">
+        <div className="w-full flex border-redjustify-start md:justify-center">
             <Image 
             src={Icon}
             width={40}

@@ -39,7 +39,7 @@ export default function LinkCard(props) {
                 <label className="block my-1 mt-16 block text-xs">Link</label>
                 <input type="text" placeholder="e.g. https://www.github.com/"
                        onChange={(e) => setUrl(e.target.value)}
-                       className="block w-full py-2 pl-2 rounded-lg border-customBorders border-2"></input>
+                       className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1"></input>
             </div>
         </div>
 );

@@ -1,7 +1,5 @@
 import AddLink from "@/app/components/add-link";
 import ProfileHeader from "@/app/components/profile-header";
-import Profile from "@/app/components/profile";
-import AuthCheck from "@/app/components/auth-check";
 
 export default function account () {
     return(

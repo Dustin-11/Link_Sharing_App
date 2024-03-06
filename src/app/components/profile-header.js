@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import auth from "@/lib/auth";
 import Link from "next/link";
-import { Limelight } from "next/font/google";
 
 
 export default function ProfileHeader() {
@@ -46,12 +45,12 @@ export default function ProfileHeader() {
                     </Image>
                 </Link>
             </div>
-            <button className="flex align-center px-3 py-2 rounded-lg focus:bg-customLightPurple border-2 border-customPurple">
+            <Link href="/preview" className="flex align-center px-3 py-2 rounded-lg focus:bg-customLightPurple border-1 border-customPurple">
                 <Image
                     src={Preview}
                     alt="Profile Preview Icon">
                 </Image>
-            </button>
+            </Link>
         </nav>
     );
 }

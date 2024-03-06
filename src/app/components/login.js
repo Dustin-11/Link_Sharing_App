@@ -45,7 +45,7 @@ export default function Login() {
             <form className="mt-8">
                 <div className="flex flex-col relative mt-2">
                     <label className="text-xs my-1">Email Address</label>
-                    <input className="border-2 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
+                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
                     type="email" 
                     placeholder="e.g. alex@email.com" 
                     value={emailAddress}
@@ -59,7 +59,7 @@ export default function Login() {
                 </div>
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Password</label>
-                    <input className="border-2 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
+                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
                     type="text" 
                     placeholder="Enter your password" 
                     value={passwordText}
@@ -70,7 +70,7 @@ export default function Login() {
                         alt="Password Icon"/>
                     </div>
                 </div>
-                <button className="w-full border-2 border-red block mx-auto py-2 bg-customPurple active:bg-customPurpleActive
+                <button className="w-full border-1 border-red block mx-auto py-2 bg-customPurple active:bg-customPurpleActive
                 active:shadow active:shadow-customLightPurple hover:customLightPurple text-white mt-6 rounded-lg" 
                 type="submit"
                 onClick={loginAccount}>Login</button>
