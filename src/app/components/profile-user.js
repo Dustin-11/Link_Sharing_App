@@ -9,6 +9,9 @@ export default function ProfileUser({ isButtonDisabled, buttonClicked, setButton
     const { setUserDetails } = useContext(UserDetailsContext);
 
     useEffect(() => {
+        if(buttonClicked) {
+            return;
+        }
         if(firstName.length >= 1 && lastName.length >= 1) {
             isButtonDisabled(false);
         }
@@ -33,15 +36,19 @@ export default function ProfileUser({ isButtonDisabled, buttonClicked, setButton
             setEmail(storedEmail);
         }
         isButtonDisabled(true);
+        setButtonClicked(true);
     }, []);
 
 
     useEffect(() => {
+        if(buttonClicked) {
         setUserDetails({firstName: firstName, lastName: lastName, email: email})
         localStorage.setItem('firstName', firstName);
         localStorage.setItem('lastName', lastName);
         localStorage.setItem('email', email);
-    }, [firstName, lastName, email]);
+        setButtonClicked(false);
+    }
+    }, [buttonClicked]);
 
 
     return(

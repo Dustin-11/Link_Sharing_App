@@ -19,6 +19,10 @@ export default function Profile () {
             setDisabled(true);
         }
     }, [clickTrigger])
+
+    useEffect(() => {
+            setDisabled(true);
+    }, [])
     return(
         <div className="bg-customLightGrey h-screen w-screen">
             <ProfileHeader></ProfileHeader>
