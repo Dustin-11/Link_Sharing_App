@@ -3,10 +3,13 @@ import Password from "../../../public/images/icon-password.svg";
 import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
 import { db } from "@/lib/firebase";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import auth from "@/lib/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { doc, collection, getDocs, query, where, setDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { UserDetailsContext } from "../layout";
+
 
 
 
@@ -15,45 +18,40 @@ export default function CreateProfile () {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const Collection = collection(db, 'users');
+    const router = useRouter();
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
    
     const createNewAccount = async (e) => {
         e.preventDefault();
         try{
-        if(password !== confirmPassword) {
-            console.log("Check Password");
-            throw new Error("Passwords do not match");
-        }
-        if(password.length < 8) {
-            console.log("Invalid Password");
-            throw new Error ("Invalid Password");
-        }
-        // const queryEmailMatch = query(Collection, where("email", "==", email));
-        // getDocs(queryEmailMatch)
-        // .then((querySnapshot) => {
-        //     if(!querySnapshot.empty) {
-        //         console.log("Email already exists");
-        //         throw new Error("Email already exists");
-        //     }
-            // addDoc(Collection, {
+            if(password !== confirmPassword) {
+                console.log("Check Password");
+                throw new Error("Passwords do not match");
+            }
+            if(password.length < 8) {
+                console.log("Invalid Password");
+                throw new Error ("Invalid Password");
+            }
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user;
+            const userId = user.uid;
+            await setDoc(doc(db, 'users', userId), {
+                // firstName: '',
+                // lastName: '',
+                email: email,
+                password: password,
+                uid: userId
+            });
+
+            // setUserDetails({
             //     email: email,
             //     password: password,
+            //     uid: userId
             // })
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             console.log('User signed up: ', userCredential.user);
+            router.push('/')
         }
-        // )
-            
-            // .then(() => {
-            //     console.log("Account created successfully");
-            //     setEmail("");
-            //     setPassword("");
-            //     setConfirmPassword("");
-            // })
-            // .catch((error) => {
-            //     console.error("Error when creating account:", error);
-            // })
-        // }
         catch (error) {
             console.error("Error in createNewAccount", error);
         }

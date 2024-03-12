@@ -1,8 +1,8 @@
 'use client';
 
-import ProfileDetails from "../components/profile-details";
 import ProfileHeader from "../components/profile-header";
 import ProfileUser from "../components/profile-user";
+import ProfilePhoto from "../components/profile-photo";
 import { useEffect, useState } from "react";
 
 export default function Profile () {
@@ -30,8 +30,9 @@ export default function Profile () {
             left-1/2 transform -translate-x-1/2 rounded-lg
             overflow-hidden">
                 <div className="h-[92%] overflow-y-scroll">
-                <ProfileDetails></ProfileDetails>
-                <ProfileUser isButtonDisabled={(bool) => {setDisabled(bool)}} buttonClicked={clickTrigger} 
+                <ProfilePhoto isButtonDisabled={(bool) => {setDisabled(bool)}} buttonClicked={clickTrigger}
+                setButtonClicked={(bool) => setClickTrigger(bool)}></ProfilePhoto>
+                <ProfileUser isButtonDisabled={(bool) => {setDisabled(bool)}} buttonClicked={clickTrigger}
                 setButtonClicked={(bool) => setClickTrigger(bool)}></ProfileUser>
                 </div>
             </main>

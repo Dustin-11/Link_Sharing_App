@@ -1,12 +1,16 @@
 'use client';
 import { useEffect, useState, useContext } from "react";
 import { UserDetailsContext } from "../layout";
+import { updateDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function ProfileUser({ isButtonDisabled, buttonClicked, setButtonClicked }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const { setUserDetails } = useContext(UserDetailsContext);
+    const [photoUrl, setPhotoUrl] = useState('');
+    const [prevPhoto, setPrevPhoto] = useState('');
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
     useEffect(() => {
         if(buttonClicked) {
@@ -21,33 +25,54 @@ export default function ProfileUser({ isButtonDisabled, buttonClicked, setButton
     }, [firstName, lastName]);
 
     useEffect(() => {
-        const storedFirst = localStorage.getItem('firstName');
-        if(storedFirst) {
-            setFirstName(storedFirst);
-        }
-
-        const storedLast = localStorage.getItem('lastName');
-        if(storedLast) {
-            setLastName(storedLast);
-        }
-
-        const storedEmail = localStorage.getItem('email');
-        if(storedEmail) {
-            setEmail(storedEmail);
-        }
         isButtonDisabled(true);
-        setButtonClicked(true);
+        setButtonClicked(false);
+        if(userDetails.firstName) {
+            setFirstName(userDetails.firstName);
+        }
+        if(userDetails.lastName) {
+            setLastName(userDetails.lastName);
+        }
+        if(userDetails.email) {
+            setEmail(userDetails.email);
+        }
+        if(userDetails.photo) {
+            setPrevPhoto(userDetails.photo);
+        }
     }, []);
 
+        useEffect(() => {
+            setPhotoUrl(userDetails.photo);
+        }, [userDetails?.photo])
+
+        useEffect(() => {
+            if (photoUrl !== prevPhoto) {
+                isButtonDisabled(false);
+            }
+        }, [photoUrl]);
 
     useEffect(() => {
         if(buttonClicked) {
-        setUserDetails({firstName: firstName, lastName: lastName, email: email})
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('lastName', lastName);
-        localStorage.setItem('email', email);
+        setUserDetails({...userDetails, firstName: firstName, lastName: lastName})
         setButtonClicked(false);
-    }
+        try{
+            const updateUser = async () => {
+                if(!userDetails.uid) {
+                    return;
+                }
+                const userReference = doc(db, 'users', userDetails.uid);
+                await updateDoc(userReference, {
+                  firstName: firstName,
+                  lastName: lastName
+                })
+              }
+              updateUser();
+              console.log('User updated sucessfully');
+            }
+            catch (error) {
+                console.log('Error occurred:', error);
+            }
+        }
     }, [buttonClicked]);
 
 

@@ -1,7 +1,9 @@
 'use client';
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { useContext, createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,11 +14,31 @@ export const UserDetailsContext = createContext();
 export default function RootLayout({ children }) {
 
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState({
+    uid: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    photo: ''
+});
+
+useEffect(() => {
+  const getUserData = async() => {
+    const docRef = doc(db, 'users', userDetails.uid);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists) {
+      console.log(docSnap.data());
+    }
+    else {
+      console.log('No data exists!!!!!!!!!!');
+    }
+    getUserData();
+  }
+}, [])
 
   useEffect(() => {
-    console.log(profilePhoto);
-  }, [profilePhoto])
+  console.log(userDetails);
+}, [userDetails]);
 
   return (
     <html lang="en">

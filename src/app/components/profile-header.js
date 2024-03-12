@@ -9,15 +9,25 @@ import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import auth from "@/lib/auth";
 import Link from "next/link";
+import { UserDetailsContext } from "../layout";
+import { useContext } from "react";
 
 
 export default function ProfileHeader() {
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const router = useRouter();
     const signingOut = () => {
         signOut(auth)
         .then(() => {
-            console.log('User signed out');
+            setUserDetails({
+                uid: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                photo: ''
+            })
             router.push('/');
+            console.log('User signed out', userDetails);
         })
         .catch((error) => {
             console.log('Error signing out', error);

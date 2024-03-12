@@ -2,25 +2,60 @@
 import Password from "../../../public/images/icon-password.svg";
 import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, where, query } from "firebase/firestore";
+import { collection, getDoc, doc, where, query } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "@/lib/auth";
+import { UserDetailsContext } from "../layout";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [emailAddress, setEmailAddress] = useState('');
     const [passwordText, setPasswordText] = useState('');
-    const Collection = collection(db, 'users');
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const router = useRouter();
+
+    const retrieveData = async() => {
+        const docRef = doc(db, 'users', userDetails.uid);
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            console.log('No data exists');
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async() => {
+        if(userDetails.uid) {
+        const data = await retrieveData();
+        setUserDetails(prevUserDetails => ({
+            ...userDetails,
+            firstName: data.firstName || prevUserDetails.firstName || '',
+            lastName: data.lastName || prevUserDetails.lastName || '',
+            photo: data.photo || prevUserDetails.photo || ''
+        }))
+    }
+}
+fetchData();
+    }, [userDetails.uid]);
+
     const loginAccount = (e) => {
         e.preventDefault()
         signInWithEmailAndPassword(auth, emailAddress, passwordText)
+        //  Takes the saves user credentials in Firestore and sets them as global variable UserDetails
         .then((userCredentials) => {
             const user = userCredentials.user;
-            console.log('User signed in:', user.email);
-            router.push('/account')
+            console.log(user);
+            setUserDetails(prevUserDetails => ({
+                ...prevUserDetails,
+                uid: user.uid,
+                email: user.email || prevUserDetails.email
+            }));
+            
+
+            router.push('/account');
         })
         .catch((error) => {
             let errorMessage = '';

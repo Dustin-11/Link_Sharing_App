@@ -45,9 +45,9 @@ export default function AddLink() {
         }
     };
 
-    useEffect(() => {
-        console.log(listOfLinks);
-    }, [listOfLinks]);
+    // useEffect(() => {
+    //     console.log(listOfLinks);
+    // }, [listOfLinks]);
     return (
         <>
             <div className="px-5 pt-5">
@@ -56,7 +56,7 @@ export default function AddLink() {
                 <button className="block border-1 border-customPurple text-customPurple font-bold w-full py-2 rounded-lg mt-8"
                         onClick={addNewLink}>+ Add new link</button>
             </div>
-            
+
                 {displayLinks ?
                 <div className="overflow-y-scroll h-[55%]">
                     {Array.from({ length: linkCount }, (_, index) => (<LinkCard count={index} key={index} updateList={(item) => handleFunction(item)}/>))}
