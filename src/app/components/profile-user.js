@@ -4,58 +4,80 @@ import { UserDetailsContext } from "../layout";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-export default function ProfileUser({ isButtonDisabled, buttonClicked, setButtonClicked }) {
+export default function ProfileUser({ nameRequirements, isInitialNames, emailNotification, trigger }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [photoUrl, setPhotoUrl] = useState('');
-    const [prevPhoto, setPrevPhoto] = useState('');
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+    const [storedNames, setStoredNames] = useState(false);
+    const [storedEmail, setStoredEmail] = useState(false);
 
+    //  Monitors firstName and lastName properties everytime they change -- even on first render -- and needs to be able to accurately affect save button disable property
     useEffect(() => {
-        if(buttonClicked) {
-            return;
+        if(!storedNames) {
+            if(firstName.length >= 1 && lastName.length >= 1) {
+                nameRequirements(true);
+            }
+            else {
+                nameRequirements(false);
+            }
         }
-        if(firstName.length >= 1 && lastName.length >= 1) {
-            isButtonDisabled(false);
+        else if(storedNames && firstName.length >= 1 && lastName.length >= 1) {
+            isInitialNames(true);
+            console.log('elseif in profile-user');
+            setStoredNames(false);
         }
+        
         else {
-            isButtonDisabled(true);
+            setStoredNames(false);
         }
     }, [firstName, lastName]);
 
+    // useEffect(() => {
+    //     if(!storedEmail) {
+    //         console.log('triggered');
+    //         // emailNotification(true);
+    //     }
+    //     else {
+    //         console.log('triggered else');
+    //         setStoredEmail(false);
+    //     }
+    // }, [email])
+
+    //  Runs on first render, brings in and updates local variable state with userDetails properties (if exist yet)
+    //  userDetails get intially updated with saved info during login
     useEffect(() => {
-        isButtonDisabled(true);
-        setButtonClicked(false);
+        let trigger1 = 0;
+        let trigger2 = 0;
         if(userDetails.firstName) {
             setFirstName(userDetails.firstName);
+            trigger1++;
         }
         if(userDetails.lastName) {
             setLastName(userDetails.lastName);
+            trigger1++;
         }
+
         if(userDetails.email) {
             setEmail(userDetails.email);
+            trigger2++;
         }
-        if(userDetails.photo) {
-            setPrevPhoto(userDetails.photo);
+
+        if(trigger1 > 0) {
+            setStoredNames(true);
+        }
+        if(trigger2 > 0) {
+            setStoredEmail(true);
         }
     }, []);
 
-        useEffect(() => {
-            setPhotoUrl(userDetails.photo);
-        }, [userDetails?.photo])
-
-        useEffect(() => {
-            if (photoUrl !== prevPhoto) {
-                isButtonDisabled(false);
-            }
-        }, [photoUrl]);
-
+        //  Triggered by save button click
+        //  Saves firstName and lastName properties in both userDetails global variable and Firestore
     useEffect(() => {
-        if(buttonClicked) {
-        setUserDetails({...userDetails, firstName: firstName, lastName: lastName})
-        setButtonClicked(false);
+        if(trigger) {
+        console.log('user triggered');
         try{
+            setUserDetails({...userDetails, firstName: firstName, lastName: lastName, email: email})
             const updateUser = async () => {
                 if(!userDetails.uid) {
                     return;
@@ -63,17 +85,18 @@ export default function ProfileUser({ isButtonDisabled, buttonClicked, setButton
                 const userReference = doc(db, 'users', userDetails.uid);
                 await updateDoc(userReference, {
                   firstName: firstName,
-                  lastName: lastName
-                })
+                  lastName: lastName,
+                  email: email
+                });
               }
               updateUser();
-              console.log('User updated sucessfully');
+              nameRequirements(false);
             }
             catch (error) {
                 console.log('Error occurred:', error);
             }
         }
-    }, [buttonClicked]);
+    }, [trigger]);
 
 
     return(

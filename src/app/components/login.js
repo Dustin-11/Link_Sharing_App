@@ -4,7 +4,7 @@ import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
 import { useState, useContext, useEffect } from "react";
 import { db } from "@/lib/firebase";
-import { collection, getDoc, doc, where, query } from "firebase/firestore";
+import { getDoc, doc} from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "@/lib/auth";
 import { UserDetailsContext } from "../layout";
@@ -26,9 +26,12 @@ export default function Login() {
         }
     }
 
+    //  Is being triggered when saving profile page.js
     useEffect(() => {
-        const fetchData = async() => {
+        console.log(userDetails.uid);
         if(userDetails.uid) {
+        const fetchData = async() => {
+            console.log('fetchData useEffect');
         const data = await retrieveData();
         setUserDetails(prevUserDetails => ({
             ...userDetails,
@@ -36,25 +39,29 @@ export default function Login() {
             lastName: data.lastName || prevUserDetails.lastName || '',
             photo: data.photo || prevUserDetails.photo || ''
         }))
-    }
+        // setUserDetails(() => ({
+        //     ...userDetails,
+        //     firstName: data.firstName
+        // }))
+        }
+        fetchData();
 }
-fetchData();
     }, [userDetails.uid]);
 
     const loginAccount = (e) => {
         e.preventDefault()
         signInWithEmailAndPassword(auth, emailAddress, passwordText)
-        //  Takes the saves user credentials in Firestore and sets them as global variable UserDetails
+        //  Takes the saved user credentials in Firestore and sets them as global variable UserDetails
         .then((userCredentials) => {
             const user = userCredentials.user;
             console.log(user);
             setUserDetails(prevUserDetails => ({
-                ...prevUserDetails,
+                ...userDetails,
                 uid: user.uid,
                 email: user.email || prevUserDetails.email
             }));
-            
-
+        })
+        .then(() => {
             router.push('/account');
         })
         .catch((error) => {
@@ -80,9 +87,9 @@ fetchData();
             <form className="mt-8">
                 <div className="flex flex-col relative mt-2">
                     <label className="text-xs my-1">Email Address</label>
-                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
-                    type="email" 
-                    placeholder="e.g. alex@email.com" 
+                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg"
+                    type="email"
+                    placeholder="e.g. alex@email.com"
                     value={emailAddress}
                     onChange={(e) => {setEmailAddress(e.target.value)}}></input>
                     <div className="absolute left-3.5 top-[37px]">
@@ -94,19 +101,19 @@ fetchData();
                 </div>
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Password</label>
-                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg" 
-                    type="text" 
-                    placeholder="Enter your password" 
+                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg"
+                    type="text"
+                    placeholder="Enter your password"
                     value={passwordText}
                     onChange={(e) => {setPasswordText(e.target.value)}}></input>
                     <div className="absolute left-3.5 top-[37px]">
-                        <Image 
+                        <Image
                         src={Password}
                         alt="Password Icon"/>
                     </div>
                 </div>
                 <button className="w-full border-1 border-red block mx-auto py-2 bg-customPurple active:bg-customPurpleActive
-                active:shadow active:shadow-customLightPurple hover:customLightPurple text-white mt-6 rounded-lg" 
+                active:shadow active:shadow-customLightPurple hover:customLightPurple text-white mt-6 rounded-lg"
                 type="submit"
                 onClick={loginAccount}>Login</button>
             </form>

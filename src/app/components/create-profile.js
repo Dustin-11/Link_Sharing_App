@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase";
 import { useContext, useState } from "react";
 import auth from "@/lib/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, collection, getDocs, query, where, setDoc } from "firebase/firestore";
+import { doc, collection, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { UserDetailsContext } from "../layout";
 

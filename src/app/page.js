@@ -5,7 +5,6 @@ import { useState } from "react";
 import SharedHeader from "./components/shared-header";
 import CreateProfile from "./components/create-profile";
 import Login from "./components/login";
-import RootLayout from "./layout";
 
 export default function Signin() {
   const [page, setPage] = useState(0)

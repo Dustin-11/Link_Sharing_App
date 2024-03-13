@@ -7,21 +7,57 @@ import { useEffect, useState } from "react";
 
 export default function Profile () {
     const [disabled, setDisabled] = useState(true);
-    const [clickTrigger, setClickTrigger] = useState(false);
+    // const [clickTrigger, setClickTrigger] = useState(false);
+    const [photoTrigger, setPhotoTrigger] = useState(false);
+    const [userTrigger, setUserTrigger] = useState(false);
+    const [photoChanged, setPhotoChanged] = useState(false);
+    const [emailChanged, setEmailChanged] = useState(false);
+    const [nameRequirementsMet, setNameRequirementsMet] = useState(false);
+    const [initialNamesReq, setInitialNamesReq] = useState(false);
 
-    const profileUserFlag = () => {
-        setClickTrigger(true);
+    const profileUserFlag = async () => {
+        if(nameRequirementsMet) {
+            await setUserTrigger(true);
+            console.log('nameRequirementsMet');
+        }
+        if(photoChanged) {
+            await setPhotoTrigger(true);
+            console.log('photoChanged');
+        }
         setDisabled(true);
     };
 
     useEffect(() => {
-        if(!clickTrigger) {
+        if(emailChanged) {
+            setDisabled(false);
+        }
+        else {
             setDisabled(true);
         }
-    }, [clickTrigger])
+    }, [emailChanged])
+
+    useEffect(() => {
+        if(photoChanged == true && nameRequirementsMet == true) {
+            setDisabled(false);
+        } else if(nameRequirementsMet) {
+            setDisabled(false);
+        } else {
+            setDisabled(true);
+        }
+    }, [photoChanged, nameRequirementsMet]);
+
+    useEffect(() => {
+        if(photoChanged && initialNamesReq) {
+            setDisabled(false);
+        }
+        else {
+            setDisabled(true);
+        }
+    }, [photoChanged])
 
     useEffect(() => {
             setDisabled(true);
+            console.log('useEffect in profile', nameRequirementsMet);
     }, [])
     return(
         <div className="bg-customLightGrey h-screen w-screen">
@@ -30,10 +66,12 @@ export default function Profile () {
             left-1/2 transform -translate-x-1/2 rounded-lg
             overflow-hidden">
                 <div className="h-[92%] overflow-y-scroll">
-                <ProfilePhoto isButtonDisabled={(bool) => {setDisabled(bool)}} buttonClicked={clickTrigger}
-                setButtonClicked={(bool) => setClickTrigger(bool)}></ProfilePhoto>
-                <ProfileUser isButtonDisabled={(bool) => {setDisabled(bool)}} buttonClicked={clickTrigger}
-                setButtonClicked={(bool) => setClickTrigger(bool)}></ProfileUser>
+                <ProfilePhoto setDidPhotoChange={(bool) => setPhotoChanged(bool)}
+                              trigger={photoTrigger}></ProfilePhoto>
+                <ProfileUser nameRequirements={(bool) => {setNameRequirementsMet(bool)}}
+                             isInitialNames={(bool) => setInitialNamesReq(bool)}
+                             emailNotification={(bool) => setEmailChanged(bool)}
+                             trigger={userTrigger}></ProfileUser>
                 </div>
             </main>
             <div className="absolute bottom-0 w-full pb-5 bg-customWhite">

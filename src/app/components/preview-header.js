@@ -1,12 +1,8 @@
 'use client'; 
 
 import Link from "next/link";
-import { useContext } from "react";
-import { PhotoContext } from "@/app/layout.js"
 
 export default function PreviewHeader() {
-
-    const { profilePhoto, setProfilePhoto } = useContext(PhotoContext);
 
     const handleClick = () => {
         setProfilePhoto(foo => foo + 1);

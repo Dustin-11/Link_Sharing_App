@@ -2,13 +2,13 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { createContext, useState, useEffect } from "react";
-import { updateDoc, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
 
-export const PhotoContext = createContext();
+// export const PhotoContext = createContext();
 export const UserDetailsContext = createContext();
 
 export default function RootLayout({ children }) {
@@ -44,9 +44,7 @@ useEffect(() => {
     <html lang="en">
       <body className={inter.className}>
         <UserDetailsContext.Provider value={{userDetails, setUserDetails}}>
-        <PhotoContext.Provider value={{profilePhoto, setProfilePhoto}}>
           {children}
-        </PhotoContext.Provider>
         </UserDetailsContext.Provider>
       </body>
     </html>

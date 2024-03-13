@@ -3,85 +3,88 @@
 import Image from "next/image";
 import UploadImage from "../../../public/images/icon-upload-image.svg";
 import { useContext, useEffect, useRef, useState } from "react";
-import { PhotoContext, UserDetailsContext } from "../layout";
+import { UserDetailsContext } from "../layout";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-export default function ProfilePhoto({ isButtonDisabled, buttonClicked, setButtonClicked }) {
+export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
     const fileUploadRef = useRef(null);
-    // const { profilePhoto, setProfilePhoto } = useContext(PhotoContext);
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const [picture, setPicture] = useState();
-    // Get a reference to the storage service, which is used to create references in your storage bucket
-    // const storage = getStorage();
+    const [uploadInfo, setUploadInfo] = useState();
 
-    // Create a storage reference from our storage service
-    // const storageRef = ref(storage);
+    //  Loads saved photo if user has one
+    useEffect(() => {
+        console.log('Initial render triggered');
+        if(userDetails.photo) {
+            setPicture(userDetails.photo);
+        }
+    }, [])
 
-
-
+    //  Uses useRef hook placed on input type='file' to be triggered whenever parent div is clicked
     const handleDivClick = () => {
         fileUploadRef.current.click();
     }
 
+    //  Triggered on save button click
+    const handleUploadTask = async (uploadTask) => {
+        try {
+            if(!userDetails.uid) {
+                return;
+            }
+            let downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            
+            const userReference = doc(db, 'users', userDetails.uid);
+            await updateDoc(userReference, {
+            photo: downloadURL
+            })
+            setUserDetails(() => ({
+                ...userDetails,
+                photo: downloadURL
+            }));
+            console.log('Updated User Database');
+        }
+        catch(error) {
+            console.log('Error', error);
+        }
+    }
+
+    //  Triggered on save button click -- main function that triggers two other functions
+    //  Updates the user info in Firestore
+    useEffect(() => {
+        
+        if(trigger){
+            handleUploadTask(uploadInfo);
+            setDidPhotoChange(false);
+        }
+    }, [trigger])
+
+
+//  Triggered automatically when user changes profile photo
+//  Stores uploadTask in state variable to be used to update user info in Firestore when save button clicked
+//  Sets picture state to current photo selected to make current UI reflex current selection -- selections should not be made permanent until save button is clicked
+//  This function needs to notify parent that photo changed
     const selectFile = (e) => {
         const file = e.target.files[0];
         console.log(file.name);
         const storage = getStorage();
         const storageRef = ref(storage, 'images/' + file.name);
-        
         const uploadTask = uploadBytesResumable(storageRef, file);
-        const imageUrl = URL.createObjectURL(file);
-        setPicture(imageUrl);
-        setUserDetails({...userDetails, photo: imageUrl});
-        // setProfilePhoto(imageUrl);
-        console.log(imageUrl);
-        const updateUser = async () => {
-            if(!userDetails.uid) {
-                return;
-            }
-            const userReference = doc(db, 'users', userDetails.uid);
-            await updateDoc(userReference, {
-              photo: imageUrl
-            })
-          }
-          updateUser();
-        // localStorage.setItem('profilePhoto', imageUrl);
+        uploadTask.on('state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes * 100);
+            console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+            console.log('Unsuccessful image upload. Please try again:', error);
+        },
+        async() => {
+            setUploadInfo(uploadTask)
+            setPicture(await getDownloadURL(uploadTask.snapshot.ref));
+            setDidPhotoChange(true);
+        });
     }
-
-    useEffect(() => {
-        if(userDetails.photo) {
-            setPicture(userDetails.photo);
-        }
-    }, [])
-    useEffect(() => {
-        if(userDetails.photo !== picture) {
-            isButtonDisabled(false);
-        } 
-    }, [picture])
-    // useEffect(() => {
-    //     // const profilePic = localStorage.getItem('profilePhoto');
-    
-            
-    //         try{
-    //             const updateUser2 = async () => {
-    //                 if(!userDetails.uid) {
-    //                     return;
-    //                 }
-    //                 const userReference = doc(db, 'users', userDetails.uid);
-    //                 await updateDoc(userReference, {
-    //                   photo: imageUrl
-    //                 })
-    //               }
-    //               updateUser2();
-    //               console.log('User updated sucessfully');
-    //             }
-    //             catch (error) {
-    //                 console.log('Error occurred:', error);
-    //             }
-        
-    // });
 
     return(
         <>
