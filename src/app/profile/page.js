@@ -7,14 +7,16 @@ import { useEffect, useState } from "react";
 
 export default function Profile () {
     const [disabled, setDisabled] = useState(true);
-    // const [clickTrigger, setClickTrigger] = useState(false);
     const [photoTrigger, setPhotoTrigger] = useState(false);
     const [userTrigger, setUserTrigger] = useState(false);
     const [photoChanged, setPhotoChanged] = useState(false);
-    const [emailChanged, setEmailChanged] = useState(false);
+    // const [emailChanged, setEmailChanged] = useState(false);
     const [nameRequirementsMet, setNameRequirementsMet] = useState(false);
     const [initialNamesReq, setInitialNamesReq] = useState(false);
 
+    //  Triggered on save button click
+    //  Reads each child component property and affects as needed
+    //  Sets disabled state back to true
     const profileUserFlag = async () => {
         if(nameRequirementsMet) {
             await setUserTrigger(true);
@@ -27,15 +29,17 @@ export default function Profile () {
         setDisabled(true);
     };
 
-    useEffect(() => {
-        if(emailChanged) {
-            setDisabled(false);
-        }
-        else {
-            setDisabled(true);
-        }
-    }, [emailChanged])
+    //  Figure out how to update save button disabled value when just email value is changed
+    // useEffect(() => {
+    //     if(emailChanged) {
+    //         setDisabled(false);
+    //     }
+    //     else {
+    //         setDisabled(true);
+    //     }
+    // }, [emailChanged])
 
+    //  Monitors photoChanged and nameRequirementsMet in order to change disabled state to affect button
     useEffect(() => {
         if(photoChanged == true && nameRequirementsMet == true) {
             setDisabled(false);
@@ -46,6 +50,7 @@ export default function Profile () {
         }
     }, [photoChanged, nameRequirementsMet]);
 
+    //  This was needed in order to tell if the initial values loaded from database met length requirements
     useEffect(() => {
         if(photoChanged && initialNamesReq) {
             setDisabled(false);
@@ -55,9 +60,9 @@ export default function Profile () {
         }
     }, [photoChanged])
 
+    //  Makes initial button disabled
     useEffect(() => {
             setDisabled(true);
-            console.log('useEffect in profile', nameRequirementsMet);
     }, [])
     return(
         <div className="bg-customLightGrey h-screen w-screen">

@@ -10,9 +10,11 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
     const [email, setEmail] = useState('');
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const [storedNames, setStoredNames] = useState(false);
-    const [storedEmail, setStoredEmail] = useState(false);
+    // const [storedEmail, setStoredEmail] = useState(false);
 
-    //  Monitors firstName and lastName properties everytime they change -- even on first render -- and needs to be able to accurately affect save button disable property
+    //  Monitors firstName and lastName properties
+    //  Uses storedNames to account for initial state changes when loading info from database
+    //  After first time through, sets storedNames to false, then uses logic to monitor as normal
     useEffect(() => {
         if(!storedNames) {
             if(firstName.length >= 1 && lastName.length >= 1) {
@@ -24,7 +26,6 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
         }
         else if(storedNames && firstName.length >= 1 && lastName.length >= 1) {
             isInitialNames(true);
-            console.log('elseif in profile-user');
             setStoredNames(false);
         }
         
@@ -33,6 +34,7 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
         }
     }, [firstName, lastName]);
 
+    //  Need to figure out how to update active state when email is updated
     // useEffect(() => {
     //     if(!storedEmail) {
     //         console.log('triggered');
@@ -60,19 +62,20 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
 
         if(userDetails.email) {
             setEmail(userDetails.email);
-            trigger2++;
+            // trigger2++;
         }
 
         if(trigger1 > 0) {
             setStoredNames(true);
         }
-        if(trigger2 > 0) {
-            setStoredEmail(true);
-        }
+        // if(trigger2 > 0) {
+        //     setStoredEmail(true);
+        // }
     }, []);
 
         //  Triggered by save button click
-        //  Saves firstName and lastName properties in both userDetails global variable and Firestore
+        //  Saves firstName, lastName, and email properties in both userDetails global variable and Firestore
+        //  Sets nameRequirements back to false for button disabled value
     useEffect(() => {
         if(trigger) {
         console.log('user triggered');

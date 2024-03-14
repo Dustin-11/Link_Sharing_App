@@ -17,6 +17,53 @@ body {
   padding: 0;
 }
 
+/* .element {
+} */
+
+.github{
+  background-color: black;
+}
+.frontend-mentor {
+  background-color: white;
+}
+.twitter {
+  background-color: aqua;
+}
+.linkedin {
+  background-color: cornflowerblue;
+}
+.youtube {
+  background-color: red;
+}
+.facebook {
+  background-color: darkslateblue;
+}
+.twitch {
+  background-color: pink;
+}
+.dev {
+  background-color: gray;
+}
+.codewars {
+  background-color: maroon;
+}
+.codepen {
+  background-color: yellow;
+}
+.freecc {
+  background-color: purple;
+}
+.gitlab {
+  background-color: orange;
+}
+.hash {
+  background-color: navy;
+}
+.stack {
+  background-color: lightsalmon;
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

@@ -28,13 +28,13 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
     }
 
     //  Triggered on save button click
+    //  Gets url from uploadInfo state and updates the user info in Firestore
     const handleUploadTask = async (uploadTask) => {
         try {
             if(!userDetails.uid) {
                 return;
             }
             let downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            
             const userReference = doc(db, 'users', userDetails.uid);
             await updateDoc(userReference, {
             photo: downloadURL
@@ -51,7 +51,8 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
     }
 
     //  Triggered on save button click -- main function that triggers two other functions
-    //  Updates the user info in Firestore
+    //  Calls the function to update user info in Firestore
+    //  Resets flag for photo change
     useEffect(() => {
         
         if(trigger){
@@ -62,6 +63,7 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
 
 
 //  Triggered automatically when user changes profile photo
+//  Uploads selected image to Firebase Storage and outputs upload progress
 //  Stores uploadTask in state variable to be used to update user info in Firestore when save button clicked
 //  Sets picture state to current photo selected to make current UI reflex current selection -- selections should not be made permanent until save button is clicked
 //  This function needs to notify parent that photo changed

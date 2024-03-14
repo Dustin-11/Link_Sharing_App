@@ -3,12 +3,12 @@ import Password from "../../../public/images/icon-password.svg";
 import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
 import { db } from "@/lib/firebase";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import auth from "@/lib/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, collection, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { UserDetailsContext } from "../layout";
+// import { UserDetailsContext } from "../layout";
 
 
 
@@ -17,11 +17,11 @@ export default function CreateProfile () {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const Collection = collection(db, 'users');
+    // const Collection = collection(db, 'users');
     const router = useRouter();
-    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+    // const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
-   
+   //  Creates new account
     const createNewAccount = async (e) => {
         e.preventDefault();
         try{
@@ -86,9 +86,9 @@ export default function CreateProfile () {
                     <label className="text-xs my-1">Create Password</label>
                     <input 
                     className="border-1 border-customBorders focus:outline-none focus:border-customPurple 
-                    active:border-customPurple text-customGrey pl-10 py-2 rounded-lg
+                    active:border-customPurple text-customGrey pl-10 pr-2 py-2 rounded-lg
                     invalid:border-customRed" 
-                    type="text" 
+                    type="password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 8 characters"
@@ -102,8 +102,8 @@ export default function CreateProfile () {
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Confirm Password</label>
                     <input className="border-1 border-customBorders focus:outline-none focus:border-customPurple 
-                    active:border-customPurple text-customGrey pl-10 py-2 rounded-lg" 
-                    type="text" 
+                    active:border-customPurple text-customGrey pl-10 pr-2 py-2 rounded-lg" 
+                    type="password" 
                     placeholder="At least 8 characters"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}

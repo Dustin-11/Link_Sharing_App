@@ -1,4 +1,5 @@
 import PreviewHeader from "../components/preview-header";
+import PreviewLinks from "../components/preview-links";
 import PreviewUser from "../components/preview-user";
 
 export default function Preview() {
@@ -9,6 +10,7 @@ export default function Preview() {
             left-1/2 transform -translate-x-1/2 rounded-lg
             overflow-y-scroll">
                 <PreviewUser></PreviewUser>
+                <PreviewLinks></PreviewLinks>
 
             </main>
         </div>

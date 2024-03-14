@@ -101,8 +101,8 @@ export default function Login() {
                 </div>
                 <div className="flex flex-col relative mt-5">
                     <label className="text-xs my-1">Password</label>
-                    <input className="border-1 border-customBorders text-customGrey pl-10 py-2 rounded-lg"
-                    type="text"
+                    <input className="border-1 border-customBorders text-customGrey pl-10 pr-2 py-2 rounded-lg"
+                    type="password"
                     placeholder="Enter your password"
                     value={passwordText}
                     onChange={(e) => {setPasswordText(e.target.value)}}></input>
