@@ -119,29 +119,24 @@ export default function AddLink() {
         console.log('ListOfLinks', listOfLinks);
     }, [memoizedListOfLinks]);
 
-
-    useEffect(() => {
-        // console.log(listOfLinks);
-    }, [listOfLinks])
-
-
     //  Begins drag and drop logic
     const handleMove = (x) => {
         dragIndexRef.current = x;
     }
 
+    //  Keeps track of scrollTop property of scrollable container
     const handleScroll = () => {
         console.log(scrollContainerRef.current.scrollTop);
         if (scrollContainerRef.current) {
-            // setScrollPosition(scrollContainerRef.current.scrollTop);
             scrollPositionRef.current = scrollContainerRef.current.scrollTop;
             
         }
     }
 
+    //  Sets tup of scrollable container to scrollPositionRef everytime listOfLinks changes
+    //  to stop from rerendering to top of container
     useLayoutEffect(() => {
         if (scrollContainerRef.current) {
-            // console.log(scrollContainerRef);
             scrollContainerRef.current.scrollTop = scrollPositionRef.current;
             console.log(scrollPositionRef.current);
         }
@@ -157,21 +152,14 @@ export default function AddLink() {
 
     const handleDragOver = (e, index) => {
         e.preventDefault();
-        // e.stopPropagation();
         const dragIndex = dragIndexRef.current;
-        // const container = scrollContainerRef.current;
-        // console.log(`Drag: ${dragIndex}`);
-        // console.log(`Hover: ${index}`);
         if(dragIndex === index || dragIndex === null || index === null || index === undefined) {
             return;
         }
 
         const draggedItem = listOfLinks[dragIndex];
-        // console.log(draggedItem);
         const hoverBoundingRect = document.getElementById(`item-${index}`)?.getBoundingClientRect();
         const offset = e.clientY - hoverBoundingRect.top - hoverBoundingRect.height / 2;
-        // console.log(offset);
-        // console.log(hoverBoundingRect);
 
         const closestIndex = listOfLinks.reduce((closest, _, i) => {
             if (i === dragIndex || i === index) return closest;
@@ -189,9 +177,9 @@ export default function AddLink() {
         }
 
         // if (offset < 20) {
-        //     container.scrollTop -= 10;
-        // } else if (offset > hoverBoundingRect - 20) {
-        //     container.scrollTop += 10;
+        //     scrollContainerRef.scrollTop -= 10;
+        // } else if (offset > hoverBoundingRect - 500) {
+        //     scrollContainerRef.scrollTop += 10;
         // }
 
         if (offset >= 0) {

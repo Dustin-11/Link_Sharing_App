@@ -17,6 +17,10 @@ body {
   padding: 0;
 }
 
+#scroll-Container::-webkit-scrollbar {
+  display: none;
+}
+
 /* .element {
 } */
 

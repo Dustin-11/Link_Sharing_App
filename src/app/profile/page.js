@@ -67,34 +67,34 @@ export default function Profile () {
     }, [])
     return(
         <div className="bg-customLightGrey h-screen w-screen">
-            
             <ProfileHeader></ProfileHeader>
             <div className="xl:flex xl:justify-between xl:pt-20 xl:h-full xl:gap-4">
-            <div className="invisible xl:visible xl:bg-white xl:w-2/5 xl:flex xl:justify-center xl:items-center xl:ml-2 xl:mb-2 xl:rounded-xl"> 
-                <PhoneIllustration></PhoneIllustration>
-            </div>
-            <div className="xl:relative xl:w-3/5 xl:mb-2 xl:mr-2 xl:rounded-xl">
-            <main className="bg-customWhite h-[calc(100vh-110px)] w-11/12 fixed bottom-4 
-            left-1/2 transform -translate-x-1/2 rounded-lg
-            overflow-hidden xl:w-full xl:absolute xl:h-full xl:bottom-0">
-                <div className="h-[92%] overflow-y-auto xl:overflow-hidden">
-                <ProfilePhoto setDidPhotoChange={(bool) => setPhotoChanged(bool)}
-                              trigger={photoTrigger}></ProfilePhoto>
-                <ProfileUser nameRequirements={(bool) => {setNameRequirementsMet(bool)}}
-                             isInitialNames={(bool) => setInitialNamesReq(bool)}
-                             emailNotification={(bool) => setEmailChanged(bool)}
-                             trigger={userTrigger}></ProfileUser>
+                <div className="invisible xl:visible xl:bg-white xl:w-2/5 xl:flex 
+                                xl:justify-center xl:items-center xl:ml-2 xl:mb-2 xl:rounded-xl"> 
+                    <PhoneIllustration></PhoneIllustration>
                 </div>
-            </main>
-            <div className="absolute bottom-0 w-full pb-5 bg-customWhite xl:w-full xl:mt-4">
-                    <div className="border-b border-customBorders"></div>
-                    <div className="px-5 xl:flex xl:justify-end xl:mr-5">
-                        <button className="mt-5 bg-customPurple text-customWhite w-full font-bold py-2 rounded-lg 
-                        disabled:bg-customLightPurple xl:w-16"
-                                disabled={disabled} onClick={profileUserFlag}>Save</button>
+                <div className="xl:relative xl:w-3/5 xl:mb-2 xl:mr-2 xl:rounded-xl">
+                    <main className="bg-customWhite h-[calc(100vh-110px)] w-11/12 fixed bottom-4 
+                                     left-1/2 transform -translate-x-1/2 rounded-lg
+                                     overflow-hidden xl:w-full xl:absolute xl:h-full xl:bottom-0">
+                        <div className="h-[92%] overflow-y-auto xl:overflow-hidden">
+                            <ProfilePhoto setDidPhotoChange={(bool) => setPhotoChanged(bool)}
+                                          trigger={photoTrigger}></ProfilePhoto>
+                            <ProfileUser nameRequirements={(bool) => {setNameRequirementsMet(bool)}}
+                                         isInitialNames={(bool) => setInitialNamesReq(bool)}
+                                         emailNotification={(bool) => setEmailChanged(bool)}
+                                         trigger={userTrigger}></ProfileUser>
+                        </div>
+                    </main>
+                    <div className="absolute bottom-0 w-full pb-5 bg-customWhite xl:w-full xl:mt-4">
+                        <div className="border-b border-customBorders"></div>
+                        <div className="px-5 xl:flex xl:justify-end xl:mr-5">
+                            <button className="mt-5 bg-customPurple text-customWhite w-full font-bold py-2 rounded-lg 
+                            disabled:bg-customLightPurple xl:w-16"
+                                    disabled={disabled} onClick={profileUserFlag}>Save</button>
+                        </div>
                     </div>
-            </div>
-            </div>
+                </div>
             </div>
         </div>
     );
