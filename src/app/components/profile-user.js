@@ -105,16 +105,28 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
     return(
         <div className="bg-customLightGrey my-4 mx-5 text-left rounded-lg p-5">
             <div className="relative">
-                <label className="block my-1 text-customDarkGrey text-xs">First Name*</label>
-                <input type="text" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)}
-                       className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey"></input>
-                <label className="block my-1 mt-5 text-customDarkGrey text-xs">Last Name*</label>
-                <input type="text" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)}
-                       className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey"></input>
-                <label className="block my-1 mt-5 block text-xs">Email</label>
-                <input type="email" placeholder='e.g. johndoe@gmail.com' value={email} 
-                       onChange={(e) => setEmail(e.target.value)}  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                       className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey"></input>
+                <div className="md:flex md:justify-between md:items-center md:mb-2">
+                    <label className="block my-1 text-customDarkGrey text-xs">First Name*</label>
+                    <div className=" md:w-3/5">
+                        <input type="text" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)}
+                               className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey md:mr-4"></input>
+                    </div>
+                </div>
+                <div className="md:flex md:justify-between md:items-center md:mb-2">
+                    <label className="block my-1 mt-5 text-customDarkGrey text-xs">Last Name*</label>
+                    <div className="md:w-3/5">
+                        <input type="text" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)}
+                               className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey md:mr-4"></input>
+                    </div>
+                </div>
+                <div className="md:flex md:justify-between md:items-center ">
+                    <label className="block my-1 mt-5 block text-xs">Email</label>
+                    <div className="md:w-3/5">
+                        <input type="email" placeholder='e.g. johndoe@gmail.com' value={email} 
+                               onChange={(e) => setEmail(e.target.value)}  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                               className="block w-full py-2 pl-2 rounded-lg border-customBorders border-1 text-customDarkGrey md:mr-4"></input>
+                    </div>
+                </div>
             </div>
         </div>
     );

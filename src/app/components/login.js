@@ -6,7 +6,7 @@ import { useState, useContext, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { getDoc, doc} from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import auth from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { UserDetailsContext } from "../layout";
 import { useRouter } from "next/navigation";
 
@@ -28,21 +28,17 @@ export default function Login() {
 
     //  Is being triggered when saving profile page.js
     useEffect(() => {
-        console.log(userDetails.uid);
         if(userDetails.uid) {
         const fetchData = async() => {
             console.log('fetchData useEffect');
         const data = await retrieveData();
         setUserDetails(prevUserDetails => ({
-            ...userDetails,
+            ...prevUserDetails,
             firstName: data.firstName || prevUserDetails.firstName || '',
             lastName: data.lastName || prevUserDetails.lastName || '',
-            photo: data.photo || prevUserDetails.photo || ''
+            photo: data.photo || prevUserDetails.photo || '',
+            links: data.links || prevUserDetails.links || []
         }))
-        // setUserDetails(() => ({
-        //     ...userDetails,
-        //     firstName: data.firstName
-        // }))
         }
         fetchData();
 }
@@ -50,6 +46,7 @@ export default function Login() {
 
     const loginAccount = (e) => {
         e.preventDefault()
+        console.log(auth);
         signInWithEmailAndPassword(auth, emailAddress, passwordText)
         //  Takes the saved user credentials in Firestore and sets them as global variable UserDetails
         .then((userCredentials) => {

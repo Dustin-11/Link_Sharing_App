@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import PhoneIcon from "../../../public/images/illustration-empty.svg"
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, useMemo, useLayoutEffect } from "react";
 import LinkCard from "./link-card";
 import { list } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { UserDetailsContext } from "../layout";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
+import update from 'immutability-helper';
 
 export default function AddLink() {
 
@@ -15,56 +19,68 @@ export default function AddLink() {
 
     // List of link-card objects -- allows for deleting and resorting
     const [listOfLinks, setListOfLinks] = useState([]);
+    const [scrollPosition, setScrollPosition] = useState(0);
     // Handles if the instruction or link-card is displayed
     const [displayLinks, setDisplayLinks] = useState(false);
     const [disabled, setDisabled] = useState(true);
+    const [flag, setFlag] = useState(false);
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+    const dragIndexRef = useRef();
+    const scrollContainerRef = useRef();
+    const scrollPositionRef = useRef();
+    const memoizedListOfLinks = useMemo(() => listOfLinks, [listOfLinks]);
 
     const addNewLink = () => {
         setDisplayLinks(true);
         const newCardDetails = {
-            name: '', 
-            link: '', 
+            name: '',
+            link: '',
             indexNumber: listOfLinks.length,
             id: Date.now()
         }
         setListOfLinks(prevState => ([...prevState, newCardDetails]))
     };
 
-    const handleFunction = (card) => {
-        if(Array.isArray(listOfLinks)) {
-            console.log('handleFunction outer if');
-            let updated = false;
-            const newArray = listOfLinks.map(link => {
-                if(link.indexNumber === card.indexNumber) {
-                    updated = true;
-                    return { ...link, name: card.name, link: card.link }
+    //  Takes individual LinkCard that has been changed as parameter
+    //  Iterates through listOfLinks array  --  finds LinkCard.id that === item.id in listOfLinks and updates it
+    const handleCardUpdate = (card) => {
+        setListOfLinks(prevList => {
+            const updatedList = prevList.map((item) => {   // , index
+                if (item.id === card.id) {
+                    return { ...item, name: card.name, link: card.link}; // , indexNumber: index
+                } else {
+                    return item;
                 }
-                else {
-                    return link
-                }
-            })
-            if (updated) {
-                setListOfLinks(newArray);
-            }
-            else {
-                setListOfLinks([...listOfLinks, card]);
-            }
-        }
-        else {
-            setListOfLinks([card]);
-        }
-    };
+            });
 
+            return updatedList;
+        })}
+
+    //  Allows user to delete single LinkCard based on it's id property
     const deleteFunction = (num) => {
         console.log(num);
         if(Array.isArray(listOfLinks)) {
-            let newArray = listOfLinks.filter(link =>
-                link.id !== num);
-                setListOfLinks(newArray);
-            }
-        }
+            setListOfLinks(prevLinks => {
+                let newArray = prevLinks.filter(link => link.id !== num);
+                newArray.forEach((item, index) => item.indexNumber = index)
+                checkIfEmpty(newArray);
+                return newArray
+            });
+            };
 
+        };
+
+    //  Checks  --  listOfLinks is empty  ?  disables save button and displayLinks is set to false  :  keep the same
+    const checkIfEmpty = (arr) => {
+        console.log(arr.length);
+        if(arr.length === 0) {
+            setDisabled(true);
+            setDisplayLinks(false);
+            console.log('inside of check ran');
+        }
+    };
+
+    //  Saved details to both global var userDetails and Firestore database
     const saveLinks = async () => {
         setDisabled(true);
         const reference = doc(db, 'users', userDetails.uid)
@@ -75,24 +91,18 @@ export default function AddLink() {
 
     }
 
+    //  If user has saved links pulled in during login, this handles displaying them properly
     useEffect(() => {
-        console.log(userDetails);
-    }, [])
-
-    useEffect(() => {
-        if(listOfLinks.length === 0) {
-            setDisplayLinks(false);
-            setDisabled(true);
+        if(userDetails.links.length > 0) {
+            setDisplayLinks(true);
+            setListOfLinks(userDetails.links);
+            
         }
-        else {
-            setDisabled(false);
-        }
-    }, [listOfLinks.length])
+    }, [userDetails.links])
 
     //  Loops through all the links and checks to see if every link has been filled out
     useEffect(() => {
         let flag;
-        console.log(listOfLinks);
         listOfLinks.forEach(obj => {
             Object.keys(obj).forEach(key => {
                 if(obj[key].length === 0 || obj[key] === undefined || obj[key] === null) {
@@ -101,16 +111,110 @@ export default function AddLink() {
             });
             if(flag) {
                 setDisabled(true);
-            } 
+            }
             else {
                 setDisabled(false);
             }
         })
-    }, [listOfLinks]);
+        console.log('ListOfLinks', listOfLinks);
+    }, [memoizedListOfLinks]);
+
+
+    useEffect(() => {
+        // console.log(listOfLinks);
+    }, [listOfLinks])
+
+
+    //  Begins drag and drop logic
+    const handleMove = (x) => {
+        dragIndexRef.current = x;
+    }
+
+    const handleScroll = () => {
+        console.log(scrollContainerRef.current.scrollTop);
+        if (scrollContainerRef.current) {
+            // setScrollPosition(scrollContainerRef.current.scrollTop);
+            scrollPositionRef.current = scrollContainerRef.current.scrollTop;
+            
+        }
+    }
+
+    useLayoutEffect(() => {
+        if (scrollContainerRef.current) {
+            // console.log(scrollContainerRef);
+            scrollContainerRef.current.scrollTop = scrollPositionRef.current;
+            console.log(scrollPositionRef.current);
+        }
+    }, [listOfLinks])
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+    }
+
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+    }
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+        // e.stopPropagation();
+        const dragIndex = dragIndexRef.current;
+        // const container = scrollContainerRef.current;
+        // console.log(`Drag: ${dragIndex}`);
+        // console.log(`Hover: ${index}`);
+        if(dragIndex === index || dragIndex === null || index === null || index === undefined) {
+            return;
+        }
+
+        const draggedItem = listOfLinks[dragIndex];
+        // console.log(draggedItem);
+        const hoverBoundingRect = document.getElementById(`item-${index}`)?.getBoundingClientRect();
+        const offset = e.clientY - hoverBoundingRect.top - hoverBoundingRect.height / 2;
+        // console.log(offset);
+        // console.log(hoverBoundingRect);
+
+        const closestIndex = listOfLinks.reduce((closest, _, i) => {
+            if (i === dragIndex || i === index) return closest;
+            const elem = document.getElementById(`item-${i}`);
+            const rect = elem.getBoundingClientRect();
+            const elemOffset = e.clientY - rect.top - rect.height / 2;
+            if (Math.abs(elemOffset) < Math.abs(offset)) {
+                return i;
+            }
+            return closest;
+        }, null);
+
+        if (closestIndex !== null) {
+            return;
+        }
+
+        // if (offset < 20) {
+        //     container.scrollTop -= 10;
+        // } else if (offset > hoverBoundingRect - 20) {
+        //     container.scrollTop += 10;
+        // }
+
+        if (offset >= 0) {
+            setListOfLinks((prevList) => {
+                const newList = [...prevList];
+                newList.splice(dragIndex, 1);
+                if (index === 0) {
+                    newList.unshift(draggedItem);
+                } else {
+                    newList.splice(index, 0, draggedItem);
+                }
+                console.log(prevList);
+                console.log(newList);
+                return newList;
+            });
+            dragIndexRef.current = index;
+        }
+    }
+
 
     return (
         <>
-            <div className="px-5 pt-5">
+            <div className="px-5 pt-5 mb-3">
                 <h1 className="text-2xl font-bold mb-3 mt-5">Customize your links</h1>
                 <p className="text-customGrey">Add/edit/remove links below and then share all your profiles with the world!</p>
                 <button className="block border-1 border-customPurple text-customPurple font-bold w-full py-2 rounded-lg mt-8"
@@ -118,15 +222,26 @@ export default function AddLink() {
             </div>
 
                 {displayLinks ?
-                <div className="overflow-y-scroll h-[55%]">
-                    {listOfLinks.map((card, index) => (
+
+                <div ref={scrollContainerRef} className="overflow-y-scroll h-[55%]"
+                     onDrop={handleDrop}
+                     onDragEnter={handleDragEnter}
+                     onScroll={handleScroll}>
+                    {memoizedListOfLinks.map((card, index) => {
+                        return(
                         <LinkCard key={card.id}
-                                  count={index}
+                                  index={index}
                                   item={card}
-                                  updateList={(item) => handleFunction(item)}
-                                  deleteLinkCard= {(num) => deleteFunction(num)}></LinkCard>
-                    ))}
-                </div> :
+                                  onDragOver={handleDragOver}
+                                  updateList={(item) => handleCardUpdate(item)}
+                                  deleteLinkCard= {(num) => deleteFunction(num)}
+                                  urlAddress={card.link}
+                                  selectedPlatform={card.name}
+                                  moveLinkCard={(i) => handleMove(i)}
+                                  ></LinkCard>)
+})}
+                </div>
+                 :
             <div className="overflow-hidden h-[55%]">
                 <div className="bg-customLightGrey my-4 mx-5 rounded-lg text-center rounded-lg">
                     <div className="px-20 pt-10">
@@ -141,16 +256,17 @@ export default function AddLink() {
                         you can reorder and edit them. We're here to help you and share your profiles with everyone.
                     </p>
                 </div>
-                
-                
+
+
             </div>}
-            
+
             <div className="absolute bottom-0 w-full pb-5 bg-customWhite">
                 <div className="border-b border-customBorders"></div>
                 <div className="px-5">
                     <button className="mt-5 bg-customPurple text-customWhite w-full font-bold py-2 rounded-lg disabled:bg-customLightPurple"
                             disabled={disabled}
-                            onClick={saveLinks}>Save</button>
+                            onClick={saveLinks}
+                            >Save</button>
                 </div>
             </div>
         </>

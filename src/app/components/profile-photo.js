@@ -16,7 +16,6 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
 
     //  Loads saved photo if user has one
     useEffect(() => {
-        console.log('Initial render triggered');
         if(userDetails.photo) {
             setPicture(userDetails.photo);
         }
@@ -94,18 +93,20 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
             <h1 className="text-2xl font-bold mb-3 mt-5">Profile Details</h1>
             <p className="text-customGrey">Add your details to create a personal touch to your profile.</p>
         </div>
-        <div className="bg-customLightGrey my-4 mx-5 text-left rounded-lg p-5 flex flex-col">
-            <p>Profile Picture</p>
-            <div className={` relative w-4/5 my-5 py-16 bg-customLightPurple rounded-xl text-center font-bold ${picture ? 'text-customWhite' : 'text-customPurple'}`} style={{backgroundImage: picture ? `url(${picture})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center'}}
-                 onClick={handleDivClick}>
-                      {picture && (<div className="absolute inset-0 bg-black bg-opacity-40"></div>)}
-                <div className="relative">
-                    <Image src={UploadImage} alt="Upload Image Icon" className="mx-auto"/>
-                    <p className="mt-2">+ Upload Image</p>
-                    <input ref={fileUploadRef} type="file" accept="image/*" className="hidden" onChange={selectFile}></input>
+        <div className="bg-customLightGrey my-4 mx-5 p-5 text-left rounded-lg flex flex-col md:flex-row md:py-0 md:justify-between">
+            <p className="block ">Profile Picture</p>
+            <div className="md:w-3/5 md:flex md:gap-4">
+                <div className={` relative my-5 py-16 bg-customLightPurple rounded-xl text-center font-bold w-3/5 max-w-56 ${picture ? 'text-customWhite' : 'text-customPurple'}`} style={{backgroundImage: picture ? `url(${picture})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center'}}
+                     onClick={handleDivClick}>
+                          {picture && (<div className="absolute inset-0 bg-black bg-opacity-40"></div>)}
+                    <div className="relative">
+                        <Image src={UploadImage} alt="Upload Image Icon" className="mx-auto"/>
+                        <p className="mt-2">+ Upload Image</p>
+                        <input ref={fileUploadRef} type="file" accept="image/*" className="hidden" onChange={selectFile}></input>
+                    </div>
                 </div>
+                <p className="text-xs md:flex md:items-center">Image must be below 1024x1024px. Use PNG or JPG format. </p>
             </div>
-            <p className="text-xs">Image must be below 1024x1024px. Use PNG or JPG format. </p>
         </div>
         </>
     )

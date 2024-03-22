@@ -20,47 +20,53 @@ body {
 /* .element {
 } */
 
+.customImage {
+  fill: currentColor;
+  color: white;
+}
+
 .github{
-  background-color: black;
+  background-color: #1A1A1A;
 }
 .frontend-mentor {
-  background-color: white;
+  background-color: #FFFFFF;
+  color: black;
 }
 .twitter {
-  background-color: aqua;
+  background-color: #43B7E9;
 }
 .linkedin {
-  background-color: cornflowerblue;
+  background-color: #2D68FF;
 }
 .youtube {
-  background-color: red;
+  background-color: #EE3939;
 }
 .facebook {
-  background-color: darkslateblue;
+  background-color: #2442AC;
 }
 .twitch {
-  background-color: pink;
+  background-color: #EE3FC8;
 }
 .dev {
-  background-color: gray;
+  background-color: #333333;
 }
 .codewars {
-  background-color: maroon;
+  background-color: #8A1A50;
 }
 .codepen {
-  background-color: yellow;
+  background-color: #AC8E24;
 }
 .freecc {
-  background-color: purple;
+  background-color: #302267;
 }
 .gitlab {
-  background-color: orange;
+  background-color: #EB4925;
 }
 .hash {
-  background-color: navy;
+  background-color: #0330D1;
 }
 .stack {
-  background-color: lightsalmon;
+  background-color: #EC7100;
 }
 
 

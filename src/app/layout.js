@@ -19,7 +19,8 @@ export default function RootLayout({ children }) {
     firstName: '',
     lastName: '',
     email: '',
-    photo: ''
+    photo: '',
+    links: []
 });
 
 useEffect(() => {

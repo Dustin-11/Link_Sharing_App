@@ -15,10 +15,11 @@ import freeCC from '../../../public/images/icon-freecodecamp.svg';
 import GitLab from '../../../public/images/icon-gitlab.svg';
 import Hash from '../../../public/images/icon-hashnode.svg';
 import Stack from '../../../public/images/icon-stack-overflow.svg';
+import Arrow from '../../../public/images/icon-arrow-right.svg';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-export default function LinkButton ({themeSetter}) {
+export default function LinkButton ({themeSetter, linkAddress}) {
     const platforms = [
         {name: 'Github', urlPath: GitHub},
         {name: 'Frontend Mentor', urlPath: Frontend},
@@ -35,35 +36,41 @@ export default function LinkButton ({themeSetter}) {
         {name: 'Hash', urlPath: Hash},
         {name: 'Stack', urlPath: Stack}
     ]
-
+    const [image, setImage] = useState();
     const [theme, setTheme] = useState();
-
-    useEffect(() => {
-        console.log(theme);
-    }, [theme])
 
     useEffect(() => {
         nameToThemeConverter();
     }, [])
-    const nameToThemeConverter = () => {
-        let modifiedString = themeSetter.toLowerCase().replace(' ', '-')
-        setTheme(modifiedString);
-        // switch(themeSetter) {
-        //     case 'Github':
-        //         setTheme('Black');
-        //         break;
-        //     case 'Frontend Mentor':
-        //         setTheme('White');
-        //         break;
-        //     case 'Twitter':
-        //         setTheme()
-        // }
 
+    const nameToThemeConverter = () => {
+        for(let i = 0; i < platforms.length; i++) {
+            if(platforms[i].name === themeSetter) {
+                setImage(platforms[i].urlPath);
+            }
+        }
+        let modifiedString = themeSetter.toLowerCase().replace(/ /g, '-')
+        setTheme(modifiedString);
+    }
+
+    const openLink = () => {
+        try {
+            window.open(linkAddress, '_blank')
+        }
+        catch (error) {
+            console.log('Invalid Link', err);
+        }
     }
 
     return(
-        <ul className='px-16'>
-            <li className={`${theme} mt-5 text-customWhite py-2 rounded-lg`}>{themeSetter}</li>
-        </ul>
+  
+            <li className={`${theme} mt-4 text-customWhite py-3 rounded-lg border-1 border-customBorders flex gap-2 pl-4 justify-between`}
+                onClick={openLink}>
+                <div className='flex gap-3'>
+                <Image src={image} alt='Platform Logo' className='customImage'></Image>
+                <span>{themeSetter}</span>
+                </div>
+                <Image src={Arrow} alt='Arrow Icon' className='mr-4'></Image>
+            </li>
     )
 }

@@ -10,7 +10,7 @@ export default function PreviewHeader() {
     }
 
     return (
-        <nav className="bg-customWhite flex justify-between align-center w-full px-6 py-4 fixed top-0">
+        <nav className="bg-customWhite flex justify-center align-center gap-4 w-full fixed top-0">
             <Link href="/account" className="mt-5 bg-customWhite border-1 border-customPurple 
             text-customPurple w-2/5 py-2 rounded-lg text-center">Back to Editor</Link>
             <button className="mt-5 bg-customPurple text-customWhite w-2/5 py-2 rounded-lg"

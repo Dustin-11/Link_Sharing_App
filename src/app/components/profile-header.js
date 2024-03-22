@@ -7,7 +7,7 @@ import Image from "next/image";
 import Icon from "../../../public/images/logo-devlinks-small.svg";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
-import auth from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { UserDetailsContext } from "../layout";
 import { useContext } from "react";
@@ -24,7 +24,8 @@ export default function ProfileHeader() {
                 firstName: '',
                 lastName: '',
                 email: '',
-                photo: ''
+                photo: '',
+                links: []
             })
             router.push('/');
             console.log('User signed out', userDetails);

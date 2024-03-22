@@ -15,20 +15,18 @@ import freeCC from '../../../public/images/icon-freecodecamp.svg';
 import GitLab from '../../../public/images/icon-gitlab.svg';
 import Hash from '../../../public/images/icon-hashnode.svg';
 import Stack from '../../../public/images/icon-stack-overflow.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 
-export default function PlatformOptions({ handleOptionSelection }) {
+export default function PlatformOptions({ handleOptionSelection, selection }) {
+    
+    //  Controls droplist display
     const [displayOptions, setDisplayOptions] = useState(false);
+
+    //  Value being displayed when droplist is closed
     const [selectedOption, setSelectedOption] = useState('Select an option');
-    const optionsClick = (platformName) => {
-        setDisplayOptions(!displayOptions);
-        if (displayOptions) {
-            setSelectedOption(platformName);
-            handleOptionSelection(platformName);
-        }
-    }
+
     const platforms = [
         {name: 'Github', urlPath: GitHub},
         {name: 'Frontend Mentor', urlPath: Frontend},
@@ -45,6 +43,24 @@ export default function PlatformOptions({ handleOptionSelection }) {
         {name: 'Hash', urlPath: Hash},
         {name: 'Stack', urlPath: Stack}
     ]
+
+    const optionsClick = (platformName) => {
+        if (displayOptions) {
+            setSelectedOption(platformName);
+            handleOptionSelection(platformName);
+        }
+        setDisplayOptions(!displayOptions);
+    }
+
+    //  
+    useEffect(() => {
+        if(selection) {
+            setSelectedOption(selection);
+            handleOptionSelection(selection);
+        }
+        
+    }, [])
+
     return(
         <>
         <div className="bg-customWhite absolute w-full py-2 rounded-lg border-customBorders border-1"

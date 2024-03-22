@@ -4,7 +4,7 @@ import Email from "../../../public/images/icon-email.svg";
 import Image from "next/image";
 import { db } from "@/lib/firebase";
 import { useState } from "react";
-import auth from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
