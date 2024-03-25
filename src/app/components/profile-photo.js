@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import UploadImage from "../../../public/images/icon-upload-image.svg";
+import UploadImage from "./icons-customizable/upload-image";
 import { useContext, useEffect, useRef, useState } from "react";
 import { UserDetailsContext } from "../layout";
 import { updateDoc, doc } from "firebase/firestore";
@@ -13,6 +13,7 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const [picture, setPicture] = useState();
     const [uploadInfo, setUploadInfo] = useState();
+    const [iconTrigger, setIconTrigger] = useState(false);
 
     //  Loads saved photo if user has one
     useEffect(() => {
@@ -20,6 +21,13 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
             setPicture(userDetails.photo);
         }
     }, [])
+
+    //  Sets the trigger for UploadIcon Component to change fill color if image is selected
+    useEffect(() => {
+        if(picture) {
+            setIconTrigger(true);
+        }
+    }, [picture])
 
     //  Uses useRef hook placed on input type='file' to be triggered whenever parent div is clicked
     const handleDivClick = () => {
@@ -100,7 +108,8 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
                      onClick={handleDivClick}>
                           {picture && (<div className="absolute inset-0 bg-black bg-opacity-40"></div>)}
                     <div className="relative">
-                        <Image src={UploadImage} alt="Upload Image Icon" className="mx-auto"/>
+                        {/* <Image src={UploadImage} alt="Upload Image Icon" className="mx-auto"/> */}
+                        <UploadImage trigger={iconTrigger} />
                         <p className="mt-2">+ Upload Image</p>
                         <input ref={fileUploadRef} type="file" accept="image/*" className="hidden" onChange={selectFile}></input>
                     </div>

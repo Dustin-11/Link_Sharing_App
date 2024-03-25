@@ -1,8 +1,8 @@
 'use client';
 
-import LinkIcon from "../../../public/images/icon-links-header.svg";
+import LinkIcon from "./icons-customizable/link-icon";
 import Preview from "../../../public/images/icon-preview-header.svg";
-import Profile from "../../../public/images/icon-profile-details-header.svg";
+import ProfileIcon from "./icons-customizable/profile-icon";
 import Image from "next/image";
 import Icon from "../../../public/images/logo-devlinks-small.svg";
 import { useRouter } from "next/navigation";
@@ -44,16 +44,18 @@ export default function ProfileHeader() {
             </Image>
             <div className="flex gap-2">
                 <Link href="/account" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">
-                    <Image
+                    {/* <Image
                         src={LinkIcon}
                         alt="Link Icon">
-                    </Image>
+                    </Image> */}
+                    <LinkIcon />
                 </Link>
                 <Link href="/profile" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">
-                    <Image
+                    {/* <Image
                         src={Profile}
                         alt="Profil Icon">
-                    </Image>
+                    </Image> */}
+                    <ProfileIcon />
                 </Link>
             </div>
             <Link href="/preview" className="flex align-center px-3 py-2 rounded-lg focus:bg-customLightPurple border-1 border-customPurple">
