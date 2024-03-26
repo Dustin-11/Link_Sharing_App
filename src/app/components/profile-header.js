@@ -44,10 +44,6 @@ export default function ProfileHeader() {
             </Image>
             <div className="flex gap-2">
                 <Link href="/account" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">
-                    {/* <Image
-                        src={LinkIcon}
-                        alt="Link Icon">
-                    </Image> */}
                     <LinkIcon />
                 </Link>
                 <Link href="/profile" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">

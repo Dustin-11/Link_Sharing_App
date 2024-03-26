@@ -14,12 +14,14 @@ export default function PreviewUser() {
                 const response = await fetch(userDetails.photo);
                 const blob = await response.blob();
                 const image = URL.createObjectURL(blob);
+                console.log(image);
                 setPhoto(image);
             } catch (error) {
                 console.error('Error loading image:', error);
             }
         }
         fetchImage();
+        
     }, [])
 
     return(
