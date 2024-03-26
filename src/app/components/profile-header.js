@@ -10,11 +10,17 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { UserDetailsContext } from "../layout";
-import { useContext } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 
 export default function ProfileHeader() {
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+    const [accountActive, setAccountActive] = useState(false);
+    const [profileActive, setProfileActive] = useState(false);
+    const [fillColor, setFillColor] = useState('#633CFF')
+    const activeElement = useRef();
+    const accountRef = useRef(null);
+    const profileRef = useRef(null);
     const router = useRouter();
     const signingOut = () => {
         signOut(auth)
@@ -34,6 +40,39 @@ export default function ProfileHeader() {
             console.log('Error signing out', error);
         })
     }
+
+    const navigate = (x) => {
+        router.push(x);
+        // test.current = router.pathname;
+        // console.log(test.current);
+    }
+
+    // useEffect(() => {
+    //     if (test.current !== undefined) {
+    //     console.log(test.current); }
+    // }, [test.current])
+
+    const handleClick1 = () => {
+        localStorage.setItem('focus', 'account'); 
+    }
+
+    const handleClick2 = () => {
+        localStorage.setItem('focus', 'profile');
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem('focus') !== null) {
+            const focusValue = localStorage.getItem('focus');
+            if(focusValue === 'account') {
+                setAccountActive(true);
+                setProfileActive(false);
+            } else if (focusValue === 'profile') {
+                setAccountActive(false);
+                setProfileActive(true);
+            }
+    }
+    }, [])
+
     return (
         <nav className="bg-customWhite flex justify-between align-center w-full px-6 py-4 fixed top-0">
             <Image
@@ -42,17 +81,16 @@ export default function ProfileHeader() {
                 className=""
                 onClick={signingOut}>
             </Image>
+            
             <div className="flex gap-2">
-                <Link href="/account" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">
-                    <LinkIcon />
-                </Link>
-                <Link href="/profile" className="flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple">
-                    {/* <Image
-                        src={Profile}
-                        alt="Profil Icon">
-                    </Image> */}
-                    <ProfileIcon />
-                </Link>
+                <a ref={accountRef} onClick={() => {handleClick1(); navigate('/account')}} href="/account" className={`flex align-center px-6 py-2 rounded-lg 
+                                                    ${accountActive ? 'bg-customLightPurple' : ''} `}>
+                    <LinkIcon colorFlag={accountActive}/>
+                </a>
+                <a ref={profileRef} onClick={() => {handleClick2(); navigate('/profile')}} href="/profile" className={`flex align-center px-6 py-2 rounded-lg focus:bg-customLightPurple focus:outline-none
+                                                                                                                       ${profileActive ? 'bg-customLightPurple' : ''}`}>
+                    <ProfileIcon colorFlag={profileActive} />
+                </a>
             </div>
             <Link href="/preview" className="flex align-center px-3 py-2 rounded-lg focus:bg-customLightPurple border-1 border-customPurple">
                 <Image

@@ -80,7 +80,7 @@ export default function Profile () {
                         <div className="h-[92%] overflow-y-auto xl:overflow-hidden">
                             <ProfilePhoto setDidPhotoChange={(bool) => setPhotoChanged(bool)}
                                           trigger={photoTrigger}></ProfilePhoto>
-                            <ProfileUser nameRequirements={(bool) => {setNameRequirementsMet(bool)}}
+                            <ProfileUser nameRequirements={(bool) => setNameRequirementsMet(bool)}
                                          isInitialNames={(bool) => setInitialNamesReq(bool)}
                                          emailNotification={(bool) => setEmailChanged(bool)}
                                          trigger={userTrigger}></ProfileUser>

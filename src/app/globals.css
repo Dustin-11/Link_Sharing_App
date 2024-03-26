@@ -29,6 +29,10 @@ body {
   color: white;
 }
 
+.active {
+  background-color: black;
+}
+
 .github{
   background-color: #1A1A1A;
 }
