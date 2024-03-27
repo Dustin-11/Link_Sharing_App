@@ -21,11 +21,9 @@ export default function Profile () {
     const profileUserFlag = async () => {
         if(nameRequirementsMet) {
             await setUserTrigger(true);
-            console.log('nameRequirementsMet');
         }
         if(photoChanged) {
             await setPhotoTrigger(true);
-            console.log('photoChanged');
         }
         setDisabled(true);
         setUserTrigger(false);

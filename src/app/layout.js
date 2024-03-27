@@ -8,7 +8,7 @@ import { db } from "@/lib/firebase";
 const inter = Inter({ subsets: ["latin"] });
 
 
-// export const PhotoContext = createContext();
+export const PhotoContext = createContext();
 export const UserDetailsContext = createContext();
 
 export default function RootLayout({ children }) {
@@ -23,20 +23,20 @@ export default function RootLayout({ children }) {
     links: []
 });
 
-//  There is an issue with this upon first starting program server??
-// useEffect(() => {
-//   const getUserData = async() => {
-//     const docRef = doc(db, 'users', userDetails.uid);
-//     const docSnap = await getDoc(docRef);
-//     if(docSnap.exists) {
-//       console.log(docSnap.data());
-//     }
-//     else {
-//       console.log('No data exists!!!!!!!!!!');
-//     }
-//     getUserData();
-//   }
-// }, [])
+// There is an issue with this upon first starting program server??
+useEffect(() => {
+  const getUserData = async() => {
+    const docRef = doc(db, 'users', userDetails.uid);
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists) {
+      console.log(docSnap.data());
+    }
+    else {
+      console.log('No data exists!!!!!!!!!!');
+    }
+    getUserData();
+  }
+}, [])
 
 useEffect(() => {
   const userInfo = localStorage.getItem('userDetails');
@@ -51,6 +51,7 @@ useEffect(() => {
     if(userDetails.firstName.length > 0 && userDetails.lastName.length > 0) {
       localStorage.setItem('userDetails', JSON.stringify(userDetails));
     }
+    console.log(userDetails);
 }, [userDetails]);
 
   return (

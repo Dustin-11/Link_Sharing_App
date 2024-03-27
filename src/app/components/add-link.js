@@ -4,14 +4,9 @@ import Image from "next/image";
 import PhoneIcon from "../../../public/images/illustration-empty.svg"
 import { useContext, useEffect, useState, useRef, useMemo, useLayoutEffect } from "react";
 import LinkCard from "./link-card";
-import { list } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { UserDetailsContext } from "../layout";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { useDrag, useDrop } from "react-dnd";
-import update from 'immutability-helper';
 
 export default function AddLink() {
 
@@ -116,7 +111,7 @@ export default function AddLink() {
             }
         })
         console.log('ListOfLinks', listOfLinks);
-    }, [memoizedListOfLinks]);
+    }, [listOfLinks]);
 
     //  Begins drag and drop logic
     const handleMove = (x) => {
@@ -235,13 +230,11 @@ export default function AddLink() {
                         className="mx-auto">
                         </Image>
                     </div>
-                    <h1 className="text-2xl font-bold mx-4 mt-4">Let's get you started</h1>
-                    <p className="text-customGrey mx-4 mt-5 pb-8">Use the "Add new link" button to get started. Once you have more than one link,
-                        you can reorder and edit them. We're here to help you and share your profiles with everyone.
+                    <h1 className="text-2xl font-bold mx-4 mt-4">Lets get you started</h1>
+                    <p className="text-customGrey mx-4 mt-5 pb-8">Use the Add new link button to get started. Once you have more than one link,
+                        you can reorder and edit them. We are here to help you and share your profiles with everyone.
                     </p>
                 </div>
-
-
             </div>}
 
             <div className="absolute bottom-0 w-full pb-5 bg-customWhite">

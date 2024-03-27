@@ -25,6 +25,16 @@ export default function ProfileHeader() {
     const signingOut = () => {
         signOut(auth)
         .then(() => {
+            // setUserDetails({
+            //     uid: '',
+            //     firstName: '',
+            //     lastName: '',
+            //     email: '',
+            //     photo: '',
+            //     links: []
+            // })
+            router.push('/');
+            localStorage.clear();
             setUserDetails({
                 uid: '',
                 firstName: '',
@@ -33,9 +43,6 @@ export default function ProfileHeader() {
                 photo: '',
                 links: []
             })
-            router.push('/');
-            localStorage.clear();
-            console.log('User signed out', userDetails);
         })
         .catch((error) => {
             console.log('Error signing out', error);

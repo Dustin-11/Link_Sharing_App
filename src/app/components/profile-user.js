@@ -43,16 +43,16 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
     }, [firstName, lastName]);
 
     //  Need to figure out how to update active state when email is updated
-    // useEffect(() => {
-    //     if(!storedEmail) {
-    //         console.log('triggered');
-    //         // emailNotification(true);
-    //     }
-    //     else {
-    //         console.log('triggered else');
-    //         setStoredEmail(false);
-    //     }
-    // }, [email])
+    useEffect(() => {
+        if(!storedEmail) {
+            console.log('triggered');
+            // emailNotification(true);
+        }
+        else {
+            console.log('triggered else');
+            setStoredEmail(false);
+        }
+    }, [email])
 
     //  Runs on first render, brings in and updates local variable state with userDetails properties (if exist yet)
     //  userDetails get intially updated with saved info during login

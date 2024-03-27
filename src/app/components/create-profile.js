@@ -8,7 +8,7 @@ import { auth } from "@/lib/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-// import { UserDetailsContext } from "../layout";
+import { UserDetailsContext } from "../layout";
 
 
 
@@ -19,7 +19,7 @@ export default function CreateProfile () {
     const [confirmPassword, setConfirmPassword] = useState("");
     // const Collection = collection(db, 'users');
     const router = useRouter();
-    // const { userDetails, setUserDetails } = useContext(UserDetailsContext);
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
 
    //  Creates new account
     const createNewAccount = async (e) => {
@@ -62,7 +62,7 @@ export default function CreateProfile () {
         <>
         <div className="w-full mt-10 md:bg-white md:py-10 md:px-10 md:rounded md:max-w-[75%] lg:max-w-[50%] xl:max-w-[40%]">
             <h1 className="text-2xl font-bold">Create account</h1>
-            <p className="text-customGrey my-2">Let's get you started sharing your links!</p>
+            <p className="text-customGrey my-2">Lets get you started sharing your links!</p>
             <form className="mt-10" onSubmit={createNewAccount}>
                 <div className="flex flex-col relative mt-2">
                     <label className="text-xs my-1">Email Address</label>
