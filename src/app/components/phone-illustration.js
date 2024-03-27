@@ -79,10 +79,6 @@ export default function PhoneIllustration() {
         }
         fetchImage();
     }, [userDetails.photo])
-
-    useEffect(() => {
-        console.log(photo);
-    }, [photo])
     
     //  SVG for arrow icon
     function Arrow({ x, y, fill }) {

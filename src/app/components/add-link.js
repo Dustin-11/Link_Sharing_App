@@ -88,7 +88,6 @@ export default function AddLink() {
             links: listOfLinks
         })
         setUserDetails(prevState => ({...prevState, links: listOfLinks}));
-
     }
 
     //  If user has saved links pulled in during login, this handles displaying them properly
@@ -126,10 +125,8 @@ export default function AddLink() {
 
     //  Keeps track of scrollTop property of scrollable container
     const handleScroll = () => {
-        console.log(scrollContainerRef.current.scrollTop);
         if (scrollContainerRef.current) {
             scrollPositionRef.current = scrollContainerRef.current.scrollTop;
-            
         }
     }
 
@@ -138,7 +135,6 @@ export default function AddLink() {
     useLayoutEffect(() => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollTop = scrollPositionRef.current;
-            console.log(scrollPositionRef.current);
         }
     }, [listOfLinks])
 

@@ -34,6 +34,7 @@ export default function ProfileHeader() {
                 links: []
             })
             router.push('/');
+            localStorage.clear();
             console.log('User signed out', userDetails);
         })
         .catch((error) => {

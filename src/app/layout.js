@@ -1,7 +1,7 @@
 'use client';
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -23,22 +23,34 @@ export default function RootLayout({ children }) {
     links: []
 });
 
+//  There is an issue with this upon first starting program server??
+// useEffect(() => {
+//   const getUserData = async() => {
+//     const docRef = doc(db, 'users', userDetails.uid);
+//     const docSnap = await getDoc(docRef);
+//     if(docSnap.exists) {
+//       console.log(docSnap.data());
+//     }
+//     else {
+//       console.log('No data exists!!!!!!!!!!');
+//     }
+//     getUserData();
+//   }
+// }, [])
+
 useEffect(() => {
-  const getUserData = async() => {
-    const docRef = doc(db, 'users', userDetails.uid);
-    const docSnap = await getDoc(docRef);
-    if(docSnap.exists) {
-      console.log(docSnap.data());
-    }
-    else {
-      console.log('No data exists!!!!!!!!!!');
-    }
-    getUserData();
+  const userInfo = localStorage.getItem('userDetails');
+  if(userInfo) {
+    const parsed = JSON.parse(userInfo);
+    console.log(parsed);
+    setUserDetails(JSON.parse(userInfo));
   }
 }, [])
 
   useEffect(() => {
-  console.log(userDetails);
+    if(userDetails.firstName.length > 0 && userDetails.lastName.length > 0) {
+      localStorage.setItem('userDetails', JSON.stringify(userDetails));
+    }
 }, [userDetails]);
 
   return (

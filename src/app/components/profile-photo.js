@@ -19,8 +19,9 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
     useEffect(() => {
         if(userDetails.photo) {
             setPicture(userDetails.photo);
+            console.log(userDetails.photo);
         }
-    }, [])
+    }, [userDetails.photo])
 
     //  Sets the trigger for UploadIcon Component to change fill color if image is selected
     useEffect(() => {
@@ -89,7 +90,7 @@ export default function ProfilePhoto({ setDidPhotoChange, trigger }) {
             console.log('Unsuccessful image upload. Please try again:', error);
         },
         async() => {
-            setUploadInfo(uploadTask)
+            setUploadInfo(uploadTask) //  check this out
             setPicture(await getDownloadURL(uploadTask.snapshot.ref));
             setDidPhotoChange(true);
         });

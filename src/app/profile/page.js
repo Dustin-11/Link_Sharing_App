@@ -11,7 +11,7 @@ export default function Profile () {
     const [photoTrigger, setPhotoTrigger] = useState(false);
     const [userTrigger, setUserTrigger] = useState(false);
     const [photoChanged, setPhotoChanged] = useState(false);
-    // const [emailChanged, setEmailChanged] = useState(false);
+    const [emailChanged, setEmailChanged] = useState(false);
     const [nameRequirementsMet, setNameRequirementsMet] = useState(false);
     const [initialNamesReq, setInitialNamesReq] = useState(false);
 
@@ -28,17 +28,20 @@ export default function Profile () {
             console.log('photoChanged');
         }
         setDisabled(true);
+        setUserTrigger(false);
+        setPhotoTrigger(false);
     };
 
     //  Figure out how to update save button disabled value when just email value is changed
-    // useEffect(() => {
-    //     if(emailChanged) {
-    //         setDisabled(false);
-    //     }
-    //     else {
-    //         setDisabled(true);
-    //     }
-    // }, [emailChanged])
+    useEffect(() => {
+        console.log('Triggered:', emailChanged);
+        if(emailChanged) {
+            setDisabled(false);
+        }
+        else {
+            setDisabled(true);
+        }
+    }, [emailChanged])
 
     //  Monitors photoChanged and nameRequirementsMet in order to change disabled state to affect button
     useEffect(() => {
@@ -51,9 +54,10 @@ export default function Profile () {
         }
     }, [photoChanged, nameRequirementsMet]);
 
-    //  This was needed in order to tell if the initial values loaded from database met length requirements
+    //  This was originally used to tell if the initial values loaded from database met length requirements
+    //  That idea is on the backburner and we are okay with the initial save button upon load being able to be clicked
     useEffect(() => {
-        if(photoChanged && initialNamesReq) {
+        if(photoChanged) {  // && initialNamesReq
             setDisabled(false);
         }
         else {

@@ -10,7 +10,7 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
     const [email, setEmail] = useState('');
     const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const [storedNames, setStoredNames] = useState(false);
-    // const [storedEmail, setStoredEmail] = useState(false);
+    const [storedEmail, setStoredEmail] = useState(false);
 
     //  Monitors firstName and lastName properties
     //  Uses storedNames to account for initial state changes when loading info from database
@@ -28,9 +28,17 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
             isInitialNames(true);
             setStoredNames(false);
         }
-        
         else {
             setStoredNames(false);
+        }
+        if(storedEmail) {
+            if(email.length > 0) {
+                emailNotification(true);
+            }
+            else {
+                emailNotification(false);
+            }
+            
         }
     }, [firstName, lastName]);
 
@@ -49,29 +57,41 @@ export default function ProfileUser({ nameRequirements, isInitialNames, emailNot
     //  Runs on first render, brings in and updates local variable state with userDetails properties (if exist yet)
     //  userDetails get intially updated with saved info during login
     useEffect(() => {
-        let trigger1 = 0;
-        let trigger2 = 0;
+        let nameTrigger = 0;
+        let emailTrigger = 0;
         if(userDetails.firstName) {
             setFirstName(userDetails.firstName);
-            trigger1++;
+            nameTrigger++;
         }
         if(userDetails.lastName) {
             setLastName(userDetails.lastName);
-            trigger1++;
+            nameTrigger++;
         }
 
         if(userDetails.email) {
             setEmail(userDetails.email);
-            // trigger2++;
+            emailTrigger++;
         }
 
-        if(trigger1 > 0) {
+        if(nameTrigger > 0) {
             setStoredNames(true);
         }
-        // if(trigger2 > 0) {
-        //     setStoredEmail(true);
-        // }
+        if(emailTrigger > 0) {
+            setStoredEmail(true);
+        }
     }, []);
+
+    useEffect(() => {
+        if(userDetails.firstName.length > 0) {
+            setFirstName(userDetails.firstName);
+        }
+        if(userDetails.lastName.length > 0) {
+            setLastName(userDetails.lastName);
+        }
+        if(userDetails.email.length > 0) {
+            setEmail(userDetails.email);
+        }
+    }, [userDetails.firstName, userDetails.lastName, userDetails.email])
 
         //  Triggered by save button click
         //  Saves firstName, lastName, and email properties in both userDetails global variable and Firestore

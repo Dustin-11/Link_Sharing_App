@@ -21,16 +21,9 @@ body {
   display: none;
 }
 
-/* .element {
-} */
-
 .customImage {
   fill: currentColor;
   color: white;
-}
-
-.active {
-  background-color: black;
 }
 
 .github{
